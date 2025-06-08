@@ -1,0 +1,18 @@
+{
+  "notion": {
+    "db_id": "abc123xyz456",
+    "secret": "secret_notion_key_here"
+  },
+  "gmail": {
+    "user": "user@example.com",
+    "token": "your-oauth-token"
+  },
+  "calendar": {
+    "timezone": "America/New_York",
+    "default_event_length": 30
+  },
+  "features": {
+    "auto_summary": true,
+    "sync_with_obsidian": false
+  }
+}
