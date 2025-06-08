@@ -1,23 +1,32 @@
+import config from '../configs/we.json' assert { type: 'json' };
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // 기본 엔드포인트: /run
     if (url.pathname === "/run" && request.method === "POST") {
-      const data = await request.json();
+      const body = await request.json();
 
-      // 예시로 Notion 설정을 불러오는 방식 (추후 확장 가능)
-      const notionDb = data.notion_db_id || "not-set";
-      const message = data.message || "Hello GPT";
+      // config에서 정보 가져오기
+      const notionDb = config.notion?.db_id || "not-set";
+      const userEmail = config.gmail?.user || "unknown@example.com";
 
       return new Response(
         JSON.stringify({
-          reply: `✅ Received message: ${message}, Notion DB: ${notionDb}`,
+          message: "Custom GPT agent received your request.",
+          received: body,
+          from_config: {
+            notion_db: notionDb,
+            gmail_user: userEmail
+          }
         }),
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
     return new Response("Not Found", { status: 404 });
   },
 };
+
