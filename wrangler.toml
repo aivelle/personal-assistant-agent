@@ -1,0 +1,15 @@
+name = "assistant-agent-api"
+type = "javascript"
+account_id = "28a29a934ac59a2e7887972b9cb042e2"
+workers_dev = true
+compatibility_date = "2025-06-08"
+
+routes = [
+  { pattern = "aivelle.com/run", zone_id = "25bfeae0a291ab9d467fec3117a64c85" }
+]
+
+[build]
+upload.format = "modules"
+
+[vars]
+# 여기에 환경변수를 넣을 수 있어요. 예: NOTION_API_KEY = "xxx"
