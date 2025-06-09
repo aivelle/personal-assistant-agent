@@ -1,0 +1,19 @@
+{
+  "name": "Time Conflict Check",
+  "description": "Check for overlapping meetings in Google Calendar and Notion schedule.",
+  "trigger": {
+    "type": "manual"
+  },
+  "source": {
+    "type": "calendar",
+    "calendars": ["google", "notion"],
+    "range": "today"
+  },
+  "action": {
+    "type": "check_conflict",
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

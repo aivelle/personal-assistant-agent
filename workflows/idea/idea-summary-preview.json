@@ -1,0 +1,23 @@
+{
+  "name": "Idea Summary Preview",
+  "description": "Summarize new ideas and show preview for Notion or Obsidian.",
+  "trigger": {
+    "type": "daily",
+    "time": "21:00"
+  },
+  "source": {
+    "type": "notion",
+    "database": "idea_spark",
+    "filter": {
+      "status": ["grow"]
+    }
+  },
+  "action": {
+    "type": "summarize",
+    "format": "markdown",
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

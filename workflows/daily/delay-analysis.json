@@ -1,0 +1,26 @@
+{
+  "name": "Delay Analysis",
+  "description": "Analyze delayed tasks and suggest next steps.",
+  "source": {
+    "type": "notion",
+    "database": "tasks",
+    "filter": {
+      "status": ["in progress"],
+      "due": { "before": "today" }
+    },
+    "group_by": "project"
+  },
+  "analysis": {
+    "method": "categorize",
+    "categories": ["Blocked", "Waiting on", "Overdue"],
+    "suggestions": true
+  },
+  "action": {
+    "type": "summary",
+    "format": "table",
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

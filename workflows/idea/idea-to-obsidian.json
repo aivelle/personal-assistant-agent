@@ -1,0 +1,22 @@
+{
+  "name": "Idea to Obsidian",
+  "description": "Send mature ideas to Obsidian vault as markdown.",
+  "trigger": {
+    "type": "manual"
+  },
+  "source": {
+    "type": "notion",
+    "database": "idea_spark",
+    "filter": {
+      "status": ["ready for export"]
+    }
+  },
+  "action": {
+    "type": "export_md",
+    "target": "obsidian.0.Seed",
+    "delivery": {
+      "method": "file_write",
+      "channel": "obsidian"
+    }
+  }
+}

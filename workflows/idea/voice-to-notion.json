@@ -1,0 +1,25 @@
+{
+  "name": "Voice to Notion",
+  "description": "Capture voice notes from Apple Shortcuts and save to Notion.",
+  "trigger": {
+    "type": "shortcuts",
+    "input_type": "voice"
+  },
+  "source": {
+    "type": "shortcuts",
+    "field": "dictation"
+  },
+  "action": {
+    "type": "create_page",
+    "target": "notion.idea_spark",
+    "properties": {
+      "title": "{{summary}}",
+      "content": "{{full_text}}",
+      "status": "draft"
+    },
+    "delivery": {
+      "method": "store",
+      "channel": "notion"
+    }
+  }
+}

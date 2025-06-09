@@ -1,0 +1,19 @@
+{
+  "name": "Email Contact Lookup",
+  "description": "Look up sender info from Notion or Google Contacts when an email arrives.",
+  "trigger": {
+    "type": "on_email_received"
+  },
+  "source": {
+    "type": "gmail",
+    "fields": ["from", "subject"]
+  },
+  "action": {
+    "type": "contact_lookup",
+    "sources": ["notion", "google_contacts"],
+    "delivery": {
+      "method": "chat",
+      "channel": "inbox-preview"
+    }
+  }
+}

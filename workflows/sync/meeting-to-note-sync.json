@@ -1,0 +1,19 @@
+{
+  "name": "Meeting to Note Sync",
+  "description": "Sync meeting summary to Obsidian and Notion.",
+  "trigger": {
+    "type": "event_end"
+  },
+  "source": {
+    "type": "google_meet",
+    "scope": "past_day"
+  },
+  "action": {
+    "type": "summarize_and_sync",
+    "targets": ["obsidian.1.Seed", "notion.notes"],
+    "delivery": {
+      "method": "dual",
+      "channel": "file_and_page"
+    }
+  }
+}

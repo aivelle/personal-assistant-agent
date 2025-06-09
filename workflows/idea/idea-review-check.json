@@ -1,0 +1,23 @@
+{
+  "name": "Idea Review Check",
+  "description": "Review captured ideas and suggest whether to archive or grow.",
+  "trigger": {
+    "type": "daily",
+    "time": "20:00"
+  },
+  "source": {
+    "type": "notion",
+    "database": "idea_spark",
+    "filter": {
+      "status": ["draft", "needs review"]
+    }
+  },
+  "action": {
+    "type": "review_decision",
+    "options": ["archive", "grow"],
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

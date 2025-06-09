@@ -1,0 +1,19 @@
+{
+  "name": "Email Context Draft",
+  "description": "Generate summary and suggested draft reply based on email context.",
+  "trigger": {
+    "type": "on_request"
+  },
+  "source": {
+    "type": "gmail_thread",
+    "fields": ["from", "to", "subject", "snippet", "thread_history"]
+  },
+  "action": {
+    "type": "context_summary_and_draft",
+    "format": "paragraph",
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

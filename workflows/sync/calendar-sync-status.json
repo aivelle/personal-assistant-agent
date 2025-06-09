@@ -1,0 +1,23 @@
+{
+  "name": "Calendar Sync Status",
+  "description": "Check if calendar and Notion task timelines are in sync.",
+  "trigger": {
+    "type": "daily",
+    "time": "07:00"
+  },
+  "source": {
+    "type": "google_calendar",
+    "filter": {
+      "range": "today"
+    }
+  },
+  "action": {
+    "type": "compare_with_notion",
+    "database": "tasks",
+    "fields": ["due", "status"],
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

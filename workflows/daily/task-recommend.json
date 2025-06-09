@@ -1,0 +1,29 @@
+{
+  "name": "Task Recommend",
+  "description": "Recommend top 3 tasks based on priority, due date, and status from Notion.",
+  "trigger": {
+    "type": "daily",
+    "time": "08:00"
+  },
+  "source": {
+    "type": "notion",
+    "database": "tasks",
+    "filter": {
+      "status": ["not started", "in progress"],
+      "priority": ["high", "medium"]
+    },
+    "sort": [
+      { "property": "priority", "order": "desc" },
+      { "property": "due", "order": "asc" }
+    ],
+    "limit": 3
+  },
+  "action": {
+    "type": "summary",
+    "format": "bullet",
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

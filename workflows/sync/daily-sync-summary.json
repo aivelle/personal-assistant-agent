@@ -1,0 +1,22 @@
+{
+  "name": "Daily Sync Summary",
+  "description": "Generate a summary of all sync activities each day.",
+  "trigger": {
+    "type": "daily",
+    "time": "23:00"
+  },
+  "source": {
+    "type": "system_log",
+    "filter": {
+      "categories": ["sync"]
+    }
+  },
+  "action": {
+    "type": "summarize",
+    "format": "table",
+    "delivery": {
+      "method": "chat",
+      "channel": "summary"
+    }
+  }
+}

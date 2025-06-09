@@ -1,0 +1,23 @@
+{
+  "name": "Notion Task to Calendar",
+  "description": "Add Notion task deadlines to Google Calendar.",
+  "trigger": {
+    "type": "daily",
+    "time": "07:30"
+  },
+  "source": {
+    "type": "notion",
+    "database": "tasks",
+    "filter": {
+      "status": ["not started", "in progress"]
+    }
+  },
+  "action": {
+    "type": "create_event",
+    "calendar": "Google Tasks",
+    "fields": {
+      "title": "{{task_name}}",
+      "date": "{{due}}"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Calendar Reschedule",
+  "description": "Suggest rescheduling options for overlapping or delayed meetings.",
+  "trigger": {
+    "type": "manual"
+  },
+  "source": {
+    "type": "calendar",
+    "filter": {
+      "status": ["overlap", "delayed"]
+    }
+  },
+  "action": {
+    "type": "reschedule_suggestion",
+    "rules": {
+      "avoid_double_booking": true,
+      "match_availability": true
+    },
+    "delivery": {
+      "method": "preview",
+      "channel": "chat"
+    }
+  }
+}

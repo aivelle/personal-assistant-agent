@@ -1,0 +1,31 @@
+{
+  "name": "Email Auto Label",
+  "description": "Automatically label emails based on content and sender.",
+  "trigger": {
+    "type": "email_received",
+    "filter": {
+      "from": ["*@important.com", "*@meeting.com"]
+    }
+  },
+  "source": {
+    "type": "gmail",
+    "fields": ["subject", "body", "from"]
+  },
+  "action": {
+    "type": "label",
+    "rules": [
+      {
+        "match": ["meeting", "calendar", "schedule"],
+        "label": "schedule"
+      },
+      {
+        "match": ["urgent", "asap", "immediately"],
+        "label": "urgent"
+      },
+      {
+        "match": ["newsletter", "promotion", "offer"],
+        "label": "read later"
+      }
+    ]
+  }
+}
