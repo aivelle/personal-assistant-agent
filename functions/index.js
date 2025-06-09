@@ -12,7 +12,7 @@ export async function onRequest(context) {
     }
   }
 
-  // GET 요청 응답 추가
+  // ✅ GET 요청 처리 추가
   if (request.method === 'GET') {
     return new Response("👋 Hello! MCP is running.", {
       headers: { "Content-Type": "text/plain" }
