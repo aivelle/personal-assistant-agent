@@ -1,11 +1,5 @@
-name = "assistant-agent-api"
-type = "javascript"
-main = "src/index.js"
-account_id = "28a29a934ac59a2e7887972b9cb042e2"
-workers_dev = true
-compatibility_date = "2025-06-08"
+name = "personal-assistant-agent"
 
-pages_build_output_dir = "public"
+pages_build_output_dir = "./public"
 
-[build]
-upload.format = "modules"
+compatibility_date = "2024-06-01"
