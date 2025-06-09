@@ -1,5 +1,5 @@
 export async function onRequestPost(context) {
-  console.log("🟢 MCP 함수가 실행되었습니다");
+  console.log("🌱 Hello from MCP!");
 
   let input = "Unknown";
 
@@ -19,5 +19,3 @@ export async function onRequestPost(context) {
     headers: { "Content-Type": "text/plain" }
   });
 }
-
-
