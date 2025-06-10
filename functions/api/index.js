@@ -1,25 +1,28 @@
 export async function onRequest(context) {
   const { request } = context;
+  console.log("🔍 요청 수신:", request.method);
 
   if (request.method === 'POST') {
     try {
       const body = await request.json();
-      return new Response(`✅ MCP 응답: You said — ${body.input}`, {
+      console.log("📨 POST Body:", body);
+      return new Response(`✅ POST Success: You said — ${body.input}`, {
         headers: { "Content-Type": "text/plain" }
       });
     } catch (err) {
-      return new Response("❌ JSON Error: " + err.message, { status: 400 });
+      console.log("❌ JSON 파싱 에러:", err.message);
+      return new Response("❌ JSON parsing failed: " + err.message, { status: 400 });
     }
   }
 
-  // ✅ GET 요청 처리 추가
   if (request.method === 'GET') {
-    return new Response("👋 Hello! MCP is running.", {
+    console.log("👋 GET 요청 처리 중...");
+    return new Response("👋 MCP GET is working ✅", {
       headers: { "Content-Type": "text/plain" }
     });
   }
 
-  return new Response("Method not allowed", { status: 405 });
+  console.log("❌ 지원되지 않는 메서드:", request.method);
+  return new Response("❌ Method not allowed", { status: 405 });
 }
-
 
