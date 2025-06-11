@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # trigger workflow update
       - name: Checkout current repository
         uses: actions/checkout@v4
 
