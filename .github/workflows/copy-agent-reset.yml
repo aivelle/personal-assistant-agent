@@ -4,10 +4,9 @@ on:
   # Allows manual trigger from GitHub UI
   workflow_dispatch:
 
-# Required to allow the action to commit and push files
+# Only allow writing to repository contents (for pushing files)
 permissions:
   contents: write
-  workflows: write
 
 jobs:
   copy-agent:
@@ -48,3 +47,4 @@ jobs:
           git add .github/actions
           git commit -m "Auto copy personal-assistant-agent to .github/actions" || echo "Nothing to commit"
           git push || echo "Push skipped (no changes or auth issue)"
+
