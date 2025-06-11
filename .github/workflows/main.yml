@@ -6,13 +6,13 @@ on:
 jobs:
   copy-agent:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v4
 
       - name: Clone personal-assistant-agent repository
-        run: |
-          git clone https://github.com/aivelle/personal-assistant-agent.git temp-agent
+        run: git clone https://github.com/aivelle/personal-assistant-agent.git temp-agent
 
       - name: Ensure .github/actions directory exists
         run: mkdir -p .github/actions
@@ -23,13 +23,16 @@ jobs:
           cp -r temp-agent/* .github/actions/
           shopt -u dotglob
 
-      - name: Show the result
+      - name: Show copied result
         run: ls -alR .github/actions/
-     
+
       - name: Commit and push copied files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git status
           git add .github/actions
-          git commit -m "Auto copy personal-assistant-agent to .github/actions"
-          git push
+          git status
+          git diff --cached
+          git commit -m "Auto copy personal-assistant-agent to .github/actions" || echo "Nothing to commit"
+          git push || echo "Push skipped (no changes or auth issue)"
