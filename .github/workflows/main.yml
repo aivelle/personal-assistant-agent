@@ -41,3 +41,6 @@ jobs:
           git add .github/actions
           git commit -m "Auto copy personal-assistant-agent to .github/actions" || echo "Nothing to commit"
           git push
+
+      # force re-trigger
+
