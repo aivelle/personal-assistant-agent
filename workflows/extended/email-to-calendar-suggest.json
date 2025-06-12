@@ -1,0 +1,37 @@
+{
+    "name": "email-to-calendar-suggest",
+    "description": "Analyzes email content to suggest potential calendar events, including title, time, and attendees.",
+    "trigger": "email.received",
+    "inputs": {
+      "email_id": "string",
+      "email_content": "string"
+    },
+    "steps": [
+      {
+        "action": "analyze_email_for_event",
+        "parameters": {
+          "keywords": ["meeting", "call", "schedule", "appointment"]
+        }
+      },
+      {
+        "action": "extract_event_details",
+        "fields": ["title", "date", "time", "attendees"]
+      },
+      {
+        "action": "generate_event_preview"
+      },
+      {
+        "action": "suggest_event_creation",
+        "platforms": ["google_calendar", "notion"]
+      }
+    ],
+    "outputs": {
+      "event_suggested": true,
+      "event_preview": {
+        "title": "string",
+        "time": "timestamp",
+        "attendees": ["email"]
+      }
+    }
+  }
+  

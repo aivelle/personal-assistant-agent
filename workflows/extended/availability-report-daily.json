@@ -1,0 +1,69 @@
+{
+    "name": "availability-report-daily",
+    "description": "Generates a time-aware report of the user's availability, based on time of day (morning or evening), calendar, and task data.",
+    "trigger": "daily.scheduled",
+    "inputs": {
+      "user_calendar": "google_calendar_id",
+      "notion_tasks": "notion_database_id",
+      "time_of_day": "morning"  
+    },
+    "steps": [
+      {
+        "action": "fetch_calendar_events",
+        "range": "today"
+      },
+      {
+        "action": "analyze_task_blocks",
+        "parameters": {
+          "include_high_priority_only": true
+        }
+      },
+      {
+        "action": "compute_availability",
+        "rules": {
+          "min_gap": "30m",
+          "work_hours": ["09:00", "18:00"]
+        }
+      },
+      {
+        "action": "time_of_day_branch",
+        "branches": {
+          "morning": [
+            {
+              "action": "generate_availability_report"
+            },
+            {
+              "action": "send_report_to_user",
+              "method": "notion_comment"
+            }
+          ],
+          "evening": [
+            {
+              "action": "identify_unfinished_tasks"
+            },
+            {
+              "action": "reason_analysis_for_incompletion"
+            },
+            {
+              "action": "reschedule_to_tomorrow"
+            },
+            {
+              "action": "suggest_next_actions"
+            },
+            {
+              "action": "send_evening_summary_to_user",
+              "method": "notion_comment"
+            }
+          ]
+        }
+      }
+    ],
+    "outputs": {
+      "status": "completed",
+      "available_slots": ["10:30–11:00", "14:00–15:30"],
+      "unfinished_tasks": ["Task A", "Task B"],
+      "rescheduled": true
+    }
+  }
+  
+  

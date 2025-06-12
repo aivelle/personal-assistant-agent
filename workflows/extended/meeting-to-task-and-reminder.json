@@ -1,0 +1,33 @@
+{
+    "name": "meeting-to-task-and-reminder",
+    "description": "After a meeting ends, this workflow creates follow-up tasks and sets reminders in Notion and Calendar.",
+    "trigger": "meeting.ended",
+    "inputs": {
+      "meeting_id": "google_meet_or_zoom_id",
+      "meeting_notes": "notion_page_id"
+    },
+    "steps": [
+      {
+        "action": "extract_action_items_from_notes",
+        "source": "meeting_notes"
+      },
+      {
+        "action": "create_notion_tasks",
+        "parameters": {
+          "project_linked": true
+        }
+      },
+      {
+        "action": "schedule_reminders",
+        "platforms": ["notion", "google_calendar"]
+      },
+      {
+        "action": "send_summary_to_user",
+        "method": "notion_comment"
+      }
+    ],
+    "outputs": {
+      "tasks_created": true,
+      "reminders_set": true
+    }
+  }
