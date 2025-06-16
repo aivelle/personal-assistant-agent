@@ -1,0 +1,8 @@
+{
+  "description": "Utility functions for date parsing, entity matching, and validation.",
+  "functions": [
+    "parse_date",
+    "validate_email",
+    "format_notion_payload"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "app": "google.calendar",
+  "description": "Monitors and syncs calendar events originating from Google Calendar, Google Appointments, and Google Meet. Also serves as a reference point for cross-app event coordination.",
+  "intent_types": [
+    "detect_conflict",
+    "detect_missing_event",
+    "mirror_to_notion_calendar",
+    "verify_event_integrity"
+  ],
+  "watch_targets": [
+    {
+      "source": "google.calendar",
+      "fields": ["title", "start_time", "end_time", "attendees", "meet_link"]
+    },
+    {
+      "source": "google.appointments",
+      "fields": ["title", "time", "attendees"]
+    },
+    {
+      "source": "google.meet",
+      "fields": ["meet_link", "start_time", "end_time"]
+    }
+  ],
+  "automation_links": [
+    {
+      "from": "google.appointments",
+      "to": "google.calendar",
+      "type": "auto_sync",
+      "direction": "one_way",
+      "notes": "Appointments are automatically synced into Google Calendar."
+    },
+    {
+      "from": "google.calendar",
+      "to": "google.meet",
+      "type": "auto_embed",
+      "direction": "one_way",
+      "notes": "Google Meet links are embedded in newly created events."
+    },
+    {
+      "from": "google.calendar",
+      "to": "notion.calendar",
+      "type": "sync_monitor",
+      "direction": "one_way",
+      "notes": "Monitors for sync accuracy between Google Calendar and Notion Calendar."
+    }
+  ],
+  "error_handling": {
+    "on_mismatch_or_missing": [
+      "Explain the situation to the user",
+      "Ask for permission before syncing missing events to Notion",
+      "If there is a conflict, list alternative time slots"
+    ]
+  },
+  "integration_behavior": {
+    "event_from_external_source": "Auto-reflected into Google Calendar",
+    "on_sync_issue": "Notify user and provide resolution options"
+  },
+  "note": "Google Calendar is not the main input source for user-created tasks or projects but serves as a hub for external and team-created events."
+}

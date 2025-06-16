@@ -1,0 +1,53 @@
+{
+  "users": {
+    "kc_user": {
+      "databases": {
+        "Idea Bank": {
+          "purpose": "창의적 아이디어를 저장하고 분류",
+          "property_mapping": {
+            "Idea Name": "title",
+            "Date Added": "created_time",
+            "Status": "status",
+            "Catagory": "category",
+            "Idea Spark": "idea_text"
+          }
+        },
+        "KC Social Media Planner": {
+          "purpose": "소셜미디어 콘텐츠 계획 및 스케줄 관리",
+          "property_mapping": {
+            "Name": "title",
+            "Date": "created_date",
+            "Platform": "platform",
+            "Status": "status",
+            "Visuals needed": "visual_required",
+            "Scheduled Time": "scheduled_time"
+          }
+        },
+        "Projects": {
+          "purpose": "프로젝트의 상태, 우선순위, 연결된 작업 추적",
+          "property_mapping": {
+            "Project Name": "title",
+            "Status": "status",
+            "Owner": "owner",
+            "Dates": "date_range",
+            "Priority": "priority",
+            "Completion": "completion_rollup"
+          }
+        },
+        "Tasks": {
+          "purpose": "프로젝트와 연결된 할 일 관리 및 우선순위 지정",
+          "property_mapping": {
+            "Task Name": "title",
+            "Status": "status",
+            "Due": "due_date",
+            "Priority": "priority",
+            "Area": "area",
+            "Project": "project_relation",
+            "Completed on": "completed_on",
+            "Delay": "delay_formula"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Entry point configuration for the Cloudflare Worker routing.",
+  "routes": [
+    {
+      "path": "/api/agent",
+      "method": "POST",
+      "handler": "router.json"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Executes actions using AI and interfaces with external APIs.",
+  "supports": [
+    "Google Calendar integration",
+    "Gmail draft creation",
+    "Notion task updates",
+    "Schedule suggestions based on task/project states"
+  ],
+  "note": "All AI actions require user confirmation before execution."
+}

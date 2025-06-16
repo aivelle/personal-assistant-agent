@@ -1,0 +1,45 @@
+{
+  "app": "google.drive",
+  "description": "Handles file storage and ensures long-term accessibility by copying shared Google Drive files to the AIVELE Drive and updating Notion links accordingly. Regular health checks prevent broken links.",
+  "intent_types": [
+    "detect_drive_link",
+    "copy_to_safe_drive",
+    "replace_notion_link",
+    "periodic_link_check"
+  ],
+  "watch_targets": [
+    {
+      "source": "notion",
+      "fields": ["external_links", "attachments"],
+      "filter": "contains_google_drive_link"
+    }
+  ],
+  "automation_links": [
+    {
+      "from": "notion",
+      "to": "google.drive",
+      "type": "trigger_on_link_detected",
+      "direction": "one_way",
+      "notes": "When a Google Drive link is added in Notion, copy it to the safe AIVELE Drive."
+    },
+    {
+      "from": "google.drive",
+      "to": "notion",
+      "type": "update_link",
+      "direction": "one_way",
+      "notes": "Replace original link with copied version that is stable and owned by AIVELE workspace."
+    },
+    {
+      "from": "google.drive",
+      "to": "google.drive",
+      "type": "link_health_check",
+      "direction": "internal",
+      "notes": "Regularly test all Notion-linked Drive files for access, expiry, and visibility issues."
+    }
+  ],
+  "drive_behavior": {
+    "on_detect_shared_link": "Copy to AIVELE Workspace Drive in folder /SharedAssets/",
+    "on_copy_complete": "Replace Notion link with copied Drive link (owned by AIVELE)",
+    "on_link_failure": "Notify user with issue and suggest manual upload or PDF fallback"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "personal-assistant-agent",
+  "version": "1.0.0",
+  "description": "A simplified personal assistant agent powered by Cloudflare Workers and Custom GPT.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler publish"
+  },
+  "author": "AIVELLE",
+  "license": "MIT",
+  "dependencies": {
+    "itty-router": "^3.0.8",
+    "openai": "^4.26.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "wrangler": "^3.45.0"
+  }
+}

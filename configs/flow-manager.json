@@ -1,0 +1,56 @@
+{
+  "flows": {
+    "create_task": {
+      "description": "Create a new task in the user's task database",
+      "required_roles": [
+        "title",
+        "status",
+        "due_date"
+      ],
+      "optional_roles": [
+        "priority",
+        "area",
+        "project_relation"
+      ],
+      "fallback_action": "ask_missing_fields",
+      "next_action": "save_to_notion"
+    },
+    "reschedule_meeting": {
+      "description": "Check availability and reschedule a meeting",
+      "required_roles": [
+        "scheduled_time",
+        "platform"
+      ],
+      "context_conditions": {
+        "calendar_conflict": "propose_alternate_times",
+        "no_meeting_link": "generate_meeting_link"
+      },
+      "next_action": "send_email_confirmation"
+    },
+    "summarize_idea": {
+      "description": "Summarize an idea from the Idea Bank and suggest next step",
+      "required_roles": [
+        "idea_text"
+      ],
+      "optional_roles": [
+        "category"
+      ],
+      "fallback_action": "ask_for_idea_spark",
+      "next_action": "show_summary_preview"
+    },
+    "content_schedule": {
+      "description": "Schedule a social media post",
+      "required_roles": [
+        "title",
+        "platform",
+        "scheduled_time"
+      ],
+      "optional_roles": [
+        "visual_required",
+        "status"
+      ],
+      "fallback_action": "ask_for_platform_and_time",
+      "next_action": "save_to_planner"
+    }
+  }
+}

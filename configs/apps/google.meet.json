@@ -1,0 +1,44 @@
+{
+  "app": "google.meet",
+  "description": "Handles meeting-related actions through Google Meet. Detects meeting start/end, records attendance, and triggers summaries if enabled. Integrated via Google Calendar and linked to Notion Calendar.",
+  "intent_types": [
+    "detect_meeting_start",
+    "detect_meeting_end",
+    "track_attendance",
+    "trigger_meeting_summary"
+  ],
+  "watch_targets": [
+    {
+      "source": "google.calendar",
+      "fields": ["title", "start_time", "end_time", "attendees", "meet_link"]
+    }
+  ],
+  "automation_links": [
+    {
+      "from": "google.calendar",
+      "to": "google.meet",
+      "type": "auto_link",
+      "direction": "one_way",
+      "notes": "Meet links are automatically attached when a Google Calendar event is created."
+    },
+    {
+      "from": "google.meet",
+      "to": "notion.calendar",
+      "type": "indirect_sync",
+      "direction": "one_way",
+      "notes": "Meet events reflected through linked Google Calendar in Notion Calendar."
+    },
+    {
+      "from": "google.meet",
+      "to": "notion.meetings",
+      "type": "log_entry",
+      "direction": "one_way",
+      "notes": "Meetings logged to the Notion 'Meetings' database via synced calendar."
+    }
+  ],
+  "meeting_behavior": {
+    "on_meeting_start": "Send reminder before start time.",
+    "on_meeting_end": "Offer meeting summary if summarization is enabled.",
+    "on_attendance_check": "Track who joined and record attendance."
+  }
+}

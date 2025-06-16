@@ -1,0 +1,72 @@
+{
+  "app": "Notion Calendar",
+  "type": "calendar",
+  "description": "Acts as the hub for all scheduling, integrates with internal Notion databases and external Google Calendar infrastructure. Monitors sync status, conflicts, and automation integrity.",
+  "intents": [
+    {
+      "intent_type": "detect_missing_event",
+      "description": "Check for events present in Google Calendar but missing in Notion Calendar.",
+      "inputs": ["google_calendar_events", "notion_calendar_events"],
+      "outputs": ["missing_event_list"]
+    },
+    {
+      "intent_type": "analyze_conflict",
+      "description": "Detect overlapping events or conflicting tasks across calendars.",
+      "inputs": ["calendar_event_list"],
+      "outputs": ["conflict_report", "suggested_slots"]
+    },
+    {
+      "intent_type": "suggest_reschedule",
+      "description": "Suggest alternative times for conflicted or delayed meetings.",
+      "inputs": ["event_id", "conflict_report"],
+      "outputs": ["reschedule_options"]
+    },
+    {
+      "intent_type": "mirror_external_event",
+      "description": "Mirror Google Calendar or Appointment updates into Notion Calendar.",
+      "inputs": ["external_event_data"],
+      "outputs": ["confirmation"]
+    },
+    {
+      "intent_type": "suggest_tasks_by_calendar",
+      "description": "Recommend tasks based on the user’s free/busy calendar blocks.",
+      "inputs": ["calendar_schedule"],
+      "outputs": ["task_recommendation_list"]
+    }
+  ],
+  "monitoring_criteria": {
+    "google_calendar_sync": ["title", "start_time", "end_time", "attendees", "meet_link"],
+    "notion_task_due_sync": true,
+    "notion_project_display": true,
+    "auto_handle_new_tasks": true,
+    "conflict_resolution_suggestions": true
+  },
+  "internal_db_connections": [
+    {
+      "source": "notion.task",
+      "connected": true,
+      "sync_field": "due_date",
+      "direction": "one_way (task → calendar)"
+    },
+    {
+      "source": "notion.project",
+      "connected": true,
+      "sync_field": "project_milestone_date",
+      "direction": "one_way (project → calendar)"
+    },
+    {
+      "source": "idea_spark",
+      "connected": false,
+      "flow": "idea_spark → task (manual intent) → calendar (auto via due_date)"
+    }
+  ],
+  "external_integrations": [
+    "google.calendar",
+    "google.appointments",
+    "google.meet"
+  ],
+  "auth": {
+    "method": "bearer",
+    "token_env": "NOTION_API_TOKEN"
+  }
+}

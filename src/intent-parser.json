@@ -1,0 +1,11 @@
+{
+  "description": "Parses user input to detect intent_type and relevant entities.",
+  "example_input": "Remind me to review the marketing deck tomorrow",
+  "output": {
+    "intent_type": "remind",
+    "entities": {
+      "task": "review the marketing deck",
+      "date": "tomorrow"
+    }
+  }
+}

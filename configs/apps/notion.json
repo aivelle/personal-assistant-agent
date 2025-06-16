@@ -1,0 +1,66 @@
+{
+  "app": "Notion",
+  "type": "database",
+  "description": "Handles project, task, and idea spark within Notion.",
+  "intents": [
+    {
+      "intent_type": "create_task",
+      "description": "Create a new task in Notion based on user input or email context.",
+      "inputs": [
+        "task_name",
+        "due_date",
+        "priority",
+        "area",
+        "related_project"
+      ],
+      "outputs": [
+        "confirmation",
+        "task_id"
+      ]
+    },
+    {
+      "intent_type": "update_task_status",
+      "description": "Update the status of an existing task.",
+      "inputs": [
+        "task_id",
+        "new_status"
+      ],
+      "outputs": [
+        "confirmation"
+      ]
+    },
+    {
+      "intent_type": "suggest_delayed_tasks",
+      "description": "Detect delayed tasks and suggest rescheduling or changes.",
+      "inputs": [
+        "project_id"
+      ],
+      "outputs": [
+        "list_of_delayed_tasks",
+        "suggested_schedule"
+      ]
+    },
+    {
+      "intent_type": "link_email_to_task",
+      "description": "Link a Gmail message to an existing or new task.",
+      "inputs": [
+        "email_subject",
+        "email_body",
+        "task_reference"
+      ],
+      "outputs": [
+        "confirmation",
+        "linked_task_id"
+      ]
+    }
+  ],
+  "auth": {
+    "method": "bearer",
+    "token_env": "NOTION_API_TOKEN"
+  },
+  "database_mappings": {
+    "tasks": "NotionTasksDBID",
+    "projects": "NotionProjectsDBID",
+    "ideas": "NotionIdeasDBID"
+  }
+}
