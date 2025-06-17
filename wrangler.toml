@@ -1,9 +1,6 @@
 
 name = "personal-assistant-agent"
-type = "javascript"
-account_id = "your_account_id_here"
+account_id = "28a29a934ac59a2e7887972b9cb042e2"
 workers_dev = true
 compatibility_date = "2025-06-01"
-
-[vars]
-GPT_API_ENDPOINT = "https://api.openai.com/v1/chat/completions"
+main = "src/index.js"
