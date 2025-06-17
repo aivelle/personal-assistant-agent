@@ -1,6 +1,5 @@
-
 name = "personal-assistant-agent"
 account_id = "28a29a934ac59a2e7887972b9cb042e2"
+main = "src/index.js"
 workers_dev = true
 compatibility_date = "2025-06-01"
-main = "src/index.js"
