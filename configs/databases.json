@@ -1,53 +1,77 @@
 {
   "users": {
-    "kc_user": {
+    "user_id": {
       "databases": {
         "Idea Bank": {
-          "purpose": "창의적 아이디어를 저장하고 분류",
+          "database_id": "idea_bank_001",
+          "notion_link": "https://www.notion.so/your_database_id_here",
+          "purpose": "Stores and categorizes creative ideas",
           "property_mapping": {
-            "Idea Name": "title",
+            "Idea Title": "title",
             "Date Added": "created_time",
             "Status": "status",
-            "Catagory": "category",
-            "Idea Spark": "idea_text"
+            "Category": "area",
+            "Idea Content": "idea_text"
           }
         },
-        "KC Social Media Planner": {
-          "purpose": "소셜미디어 콘텐츠 계획 및 스케줄 관리",
+        "Social Media Planner": {
+          "database_id": "social_media_001",
+          "notion_link": "https://www.notion.so/your_database_id_here",
+          "purpose": "Plans and schedules social media content",
           "property_mapping": {
-            "Name": "title",
+            "Post Title": "title",
             "Date": "created_date",
             "Platform": "platform",
             "Status": "status",
-            "Visuals needed": "visual_required",
-            "Scheduled Time": "scheduled_time"
+            "Visuals Needed": "visual_required",
+            "Scheduled Time": "scheduled_time",
+            "Attachment": "media_attachment"
           }
         },
         "Projects": {
-          "purpose": "프로젝트의 상태, 우선순위, 연결된 작업 추적",
+          "database_id": "projects_001",
+          "notion_link": "https://www.notion.so/your_database_id_here",
+          "purpose": "Tracks project progress and related tasks",
           "property_mapping": {
-            "Project Name": "title",
+            "Project Title": "title",
             "Status": "status",
             "Owner": "owner",
-            "Dates": "date_range",
+            "Date Range": "date_range",
             "Priority": "priority",
-            "Completion": "completion_rollup"
+            "Completion % (Auto)": "completion_rollup"
           }
         },
         "Tasks": {
-          "purpose": "프로젝트와 연결된 할 일 관리 및 우선순위 지정",
+          "database_id": "tasks_001",
+          "notion_link": "https://www.notion.so/your_database_id_here",
+          "purpose": "Manages actionable tasks linked to projects",
           "property_mapping": {
-            "Task Name": "title",
+            "Task Title": "title",
             "Status": "status",
-            "Due": "due_date",
+            "Due Date": "due_date",
             "Priority": "priority",
-            "Area": "area",
-            "Project": "project_relation",
-            "Completed on": "completed_on",
-            "Delay": "delay_formula"
+            "Category": "area",
+            "Linked Project": "project_relation",
+            "Completed On": "completed_on",
+            "Delay (Auto)": "delay_formula"
+          }
+        },
+        "Additional DB (Optional)": {
+          "database_id": "custom_db_001",
+          "notion_link": "https://www.notion.so/your_database_id_here",
+          "purpose": "User-defined additional database",
+          "property_mapping": {
+            "Custom Title": "title",
+            "Custom Content": "content"
           }
         }
       }
     }
   }
 }
+
+git add configs/databases.json
+git commit -m "Fix: enforce update to databases.json with new user_id schema"
+git push origin main
+
+
