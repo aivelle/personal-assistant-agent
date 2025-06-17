@@ -1,10 +1,9 @@
-{
-  "description": "Entry point configuration for the Cloudflare Worker routing.",
-  "routes": [
-    {
-      "path": "/api/agent",
-      "method": "POST",
-      "handler": "router.json"
-    }
-  ]
+// src/index.js
+export default {
+  async fetch(request) {
+    return new Response("👋 Hello from your personal assistant agent!", {
+      status: 200,
+      headers: { "Content-Type": "text/plain" }
+    });
+  }
 }
