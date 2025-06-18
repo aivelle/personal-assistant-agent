@@ -114,5 +114,5 @@ export default {
 };
 
 // Example: Run a workflow from a test prompt (for development/testing only)
-const testPrompt = "can you record this idea for me?";
-runWorkflowFromPrompt(testPrompt);
+// const testPrompt = "can you record this idea for me?";
+// runWorkflowFromPrompt(testPrompt);
