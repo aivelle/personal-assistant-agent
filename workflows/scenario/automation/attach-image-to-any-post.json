@@ -1,0 +1,16 @@
+{
+  "workflow_id": "attach_image_to_any_post",
+  "trigger": "on_image_upload",
+  "actions": [
+    {
+      "type": "ask_user",
+      "prompt": "Which post should this image be attached to?",
+      "output_var": "target_post_id"
+    },
+    {
+      "type": "attach_image",
+      "post_id": "{{target_post_id}}",
+      "image_url_var": "uploaded_image_url"
+    }
+  ]
+} 
