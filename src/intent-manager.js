@@ -1,7 +1,7 @@
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
 
 /**
- * Analyzes a user's prompt and returns the matched intent route
+ * (Deprecated) Analyzes a user's prompt and returns the matched intent route using config-based keywords.
  * @param {string} prompt - The user input
  * @returns {string|null} - The route name if matched, else null
  */
@@ -28,48 +28,17 @@ import promptRouter from "../configs/prompt-router.json" assert { type: 'json' }
  */
 export function getIntentFromPrompt(prompt) {
   const lowered = prompt.toLowerCase();
-
-  if (
-    lowered.includes("record") ||
-    lowered.includes("voice") ||
-    lowered.includes("idea")
-  ) {
-    return "voice_to_anywhere";
+  if (lowered.includes("summarize") || lowered.includes("summary")) {
+    return "daily_intent_digest";
   }
-
-  if (
-    lowered.includes("image") ||
-    lowered.includes("attach") ||
-    lowered.includes("upload")
-  ) {
-    return "attach_image";
+  if (lowered.includes("image") && (lowered.includes("attach") || lowered.includes("add"))) {
+    return "attach_image_to_any_post";
   }
-
-  if (
-    lowered.includes("repurpose") ||
-    lowered.includes("reuse") ||
-    lowered.includes("turn this into") ||
-    lowered.includes("transform")
-  ) {
-    return "repurpose_content";
-  }
-
-  if (
-    lowered.includes("reschedule") ||
-    lowered.includes("change time") ||
-    lowered.includes("postpone") ||
-    lowered.includes("move meeting")
-  ) {
+  if (lowered.includes("meeting") && (lowered.includes("reschedule") || lowered.includes("change"))) {
     return "reschedule_meeting";
   }
-
-  if (
-    lowered.includes("summary") ||
-    lowered.includes("digest") ||
-    lowered.includes("recap of today")
-  ) {
-    return "daily_digest";
+  if (lowered.includes("record") || lowered.includes("idea") || lowered.includes("voice")) {
+    return "voice_to_anywhere";
   }
-
   return null;
 } 
