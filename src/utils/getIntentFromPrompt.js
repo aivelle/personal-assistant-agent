@@ -9,41 +9,31 @@
 export function getIntentFromPrompt(prompt) {
   const lowered = prompt.toLowerCase();
 
-  if (
-    lowered.includes("summarize") ||
-    lowered.includes("summary") ||
-    prompt.includes("정리") ||
-    prompt.includes("요약")
-  ) {
+  if (prompt.includes("정리") || prompt.includes("요약") ||
+      lowered.includes("summarize") || lowered.includes("summary")) {
     return "daily_intent_digest";
   }
 
-  if (
-    (lowered.includes("image") && (lowered.includes("attach") || lowered.includes("add"))) ||
-    (prompt.includes("이미지") && prompt.includes("붙여"))
-  ) {
+  if ((prompt.includes("이미지") && prompt.includes("붙여")) ||
+      (lowered.includes("image") && (lowered.includes("attach") || lowered.includes("add")))) {
     return "attach_image_to_any_post";
   }
 
-  if (
-    (lowered.includes("meeting") && (lowered.includes("reschedule") || lowered.includes("change"))) ||
-    (prompt.includes("회의") && prompt.includes("변경"))
-  ) {
+  if ((prompt.includes("회의") && prompt.includes("변경")) ||
+      (lowered.includes("meeting") && (lowered.includes("reschedule") || lowered.includes("change")))) {
     return "reschedule_meeting";
   }
 
   if (
+    prompt.includes("기록") ||
+    prompt.includes("아이디어") ||
+    prompt.includes("음성") ||
     lowered.includes("record") ||
     lowered.includes("idea") ||
-    lowered.includes("voice") ||
-    prompt.includes("기록") ||
-    prompt.includes("아이디어")
+    lowered.includes("voice")
   ) {
     return "voice_to_anywhere";
   }
 
   return null;
 }
-
-
-
