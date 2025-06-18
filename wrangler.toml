@@ -7,3 +7,10 @@ compatibility_date = "2025-06-01"
 [[kv_namespaces]]
 binding = "USERS_KV"
 id = "09653d527f3a46688c1ed5cf2bca446c"
+
+
+[vars]
+ENVIRONMENT = "production"
+
+[triggers]
+crons = []
