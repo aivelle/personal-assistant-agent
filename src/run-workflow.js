@@ -80,4 +80,7 @@ export async function runWorkflowFromPrompt(prompt, context = {}) {
 // runWorkflowFromPrompt('Please record a voice note', { user_id: 'user_id_123' });
 
 // Example usage (for testing):
-// runWorkflowByKey('voice_to_anywhere', { voice_data: 'sample' }) 
+// runWorkflowByKey('voice_to_anywhere', { voice_data: 'sample' })
+
+const testPrompt = "Can you record this idea for me?";
+runWorkflowFromPrompt(testPrompt); 
