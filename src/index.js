@@ -3,6 +3,7 @@
 import { getDatabases, createNotionTask } from "./notion.js";
 import { workflows, runWorkflow } from "./workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
+import { runWorkflowFromPrompt } from "./run-workflow.js";
 
 export default {
   async fetch(request, env) {
@@ -80,3 +81,7 @@ export default {
     });
   }
 };
+
+// Example: Run a workflow from a test prompt (for development/testing only)
+const testPrompt = "can you record this idea for me?";
+runWorkflowFromPrompt(testPrompt);
