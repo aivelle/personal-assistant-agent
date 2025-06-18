@@ -4,7 +4,7 @@ import { getDatabases, createNotionTask } from "./notion.js";
 import { workflows, runWorkflow } from "./workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
 import { runWorkflowFromPrompt } from "./run-workflow.js";
-import { getIntentFromPrompt } from "./intent-detector.js";
+import { getIntentFromPrompt } from "./intent-manager.js";
 
 export default {
   async fetch(request, env) {
