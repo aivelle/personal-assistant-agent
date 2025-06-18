@@ -76,6 +76,26 @@ export default {
       }
     }
 
+    // Handle POST requests to the root path
+    if (pathname === "/" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const prompt = body.prompt || "";
+        const intent = getIntentFromPrompt(prompt);
+
+        if (!intent) {
+          return new Response("❌ No matching intent found.", { status: 400 });
+        }
+
+        const result = await runWorkflow(intent, prompt);
+        return new Response(JSON.stringify(result), {
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (err) {
+        return new Response(`❌ Error: ${err.message}`, { status: 500 });
+      }
+    }
+
     // 5. Default response
     const body = await request.json();
     const prompt = body.prompt || "";
