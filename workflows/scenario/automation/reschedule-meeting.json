@@ -1,0 +1,32 @@
+{
+  "workflow_id": "reschedule_meeting",
+  "trigger": "on_conflict_or_user_request",
+  "actions": [
+    {
+      "type": "ask_user",
+      "prompt": "Which meeting do you want to reschedule?",
+      "output_var": "meeting_id"
+    },
+    {
+      "type": "detect_conflict",
+      "meeting_id": "{{meeting_id}}",
+      "output_var": "conflict_info"
+    },
+    {
+      "type": "suggest_alternatives",
+      "conflict_info": "{{conflict_info}}",
+      "output_var": "suggested_times"
+    },
+    {
+      "type": "ask_user",
+      "prompt": "Which new time would you like to select?",
+      "options_var": "suggested_times",
+      "output_var": "selected_time"
+    },
+    {
+      "type": "update_meeting",
+      "meeting_id": "{{meeting_id}}",
+      "new_time": "{{selected_time}}"
+    }
+  ]
+} 
