@@ -15,6 +15,8 @@ export async function handleNotionOAuthRequest(request) {
  * Notion OAuth 콜백 엔드포인트
  * GET /oauth/notion/callback
  */
+import { saveUserOAuthData } from '../utils/oauth.js';
+
 export async function handleNotionOAuthCallback(request) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
@@ -33,7 +35,15 @@ export async function handleNotionOAuthCallback(request) {
   });
   const tokenData = await tokenRes.json();
 
-  // TODO: users.json에 access_token, workspace_id 등 저장
+  // 예시: userId는 notion_user_id 또는 workspace_id로 대체 필요
+  const userId = tokenData.owner?.user?.id || tokenData.workspace_id || 'notion_user';
+  await saveUserOAuthData(userId, {
+    provider: 'notion',
+    access_token: tokenData.access_token,
+    workspace_id: tokenData.workspace_id,
+    bot_id: tokenData.bot_id
+  });
 
-  return new Response('Notion 인증 완료! 이제 서비스를 이용할 수 있습니다.');
+  // 인증 성공 후 프론트엔드로 리디렉션
+  return Response.redirect('/onboarding/success', 302);
 } 

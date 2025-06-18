@@ -5,6 +5,8 @@ import { workflows, runWorkflow } from "./workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
 import { runWorkflowFromPrompt } from "./run-workflow.js";
 import { getIntentFromPrompt } from "./utils/getIntentFromPrompt.js";
+import { handleGoogleOAuthRequest, handleGoogleOAuthCallback } from './oauth/google.js';
+import { handleNotionOAuthRequest, handleNotionOAuthCallback } from './oauth/notion.js';
 
 export default {
   async fetch(request, env) {
@@ -118,3 +120,19 @@ export default {
 // Example: Run a workflow from a test prompt (for development/testing only)
 // const testPrompt = "can you record this idea for me?";
 // runWorkflowFromPrompt(testPrompt);
+
+// 예시: Cloudflare Workers 스타일 라우팅
+addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+  if (url.pathname === '/oauth/google') {
+    event.respondWith(handleGoogleOAuthRequest(event.request));
+  } else if (url.pathname === '/oauth/google/callback') {
+    event.respondWith(handleGoogleOAuthCallback(event.request));
+  } else if (url.pathname === '/oauth/notion') {
+    event.respondWith(handleNotionOAuthRequest(event.request));
+  } else if (url.pathname === '/oauth/notion/callback') {
+    event.respondWith(handleNotionOAuthCallback(event.request));
+  } else {
+    // ... 기존 라우팅 ...
+  }
+});

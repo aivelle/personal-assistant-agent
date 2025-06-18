@@ -16,6 +16,8 @@ export async function handleGoogleOAuthRequest(request) {
  * Google OAuth 콜백 엔드포인트
  * GET /oauth/google/callback
  */
+import { saveUserOAuthData } from '../utils/oauth.js';
+
 export async function handleGoogleOAuthCallback(request) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
@@ -35,7 +37,16 @@ export async function handleGoogleOAuthCallback(request) {
   });
   const tokenData = await tokenRes.json();
 
-  // TODO: users.json에 access_token, refresh_token, user_id 등 저장
+  // 예시: userId는 email 또는 sub(구글 계정 고유값)로 대체 필요
+  const userId = tokenData.id_token || 'google_user';
+  await saveUserOAuthData(userId, {
+    provider: 'google',
+    access_token: tokenData.access_token,
+    refresh_token: tokenData.refresh_token,
+    expires_in: tokenData.expires_in,
+    scope: tokenData.scope
+  });
 
-  return new Response('Google 인증 완료! 이제 서비스를 이용할 수 있습니다.');
+  // 인증 성공 후 프론트엔드로 리디렉션
+  return Response.redirect('/onboarding/success', 302);
 } 
