@@ -1,20 +1,19 @@
 // src/workflow-engine.js
 
 import { log, error as logError } from "./utils/logger.js";
-import * as voiceToAnywhere from "./workflows/voice_to_anywhere.js";
-import * as attachImageToAnyPost from "./workflows/attach_image_to_any_post.js";
-import * as contentRepurpose from "./workflows/content_repurpose.js";
-import * as rescheduleMeeting from "./workflows/reschedule_meeting.js";
-import * as dailyIntentDigest from "./workflows/daily_intent_digest.js";
-// TODO: Support dynamic import for new workflows (e.g., import.meta.glob or build script)
 
-const workflows = {
-  voice_to_anywhere: voiceToAnywhere,
-  attach_image_to_any_post: attachImageToAnyPost,
-  content_repurpose: contentRepurpose,
-  reschedule_meeting: rescheduleMeeting,
-  daily_intent_digest: dailyIntentDigest,
-};
+// Dynamically import all workflow modules in src/workflows/*.js
+const modules = import.meta.glob('./workflows/*.js', { eager: true });
+
+const workflows = {};
+for (const path in modules) {
+  // Extract intent from filename (e.g., ./workflows/voice_to_anywhere.js → voice_to_anywhere)
+  const match = path.match(/\.\/workflows\/(.+)\.js$/);
+  if (match) {
+    const intent = match[1];
+    workflows[intent] = modules[path];
+  }
+}
 
 /**
  * Runs the workflow for the given intent
