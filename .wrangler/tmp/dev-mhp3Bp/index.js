@@ -1,5 +1,9 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 
 // configs/databases.js
 var databases_default = {
@@ -100,207 +104,156 @@ async function createNotionTask(properties, notionToken) {
     })
   });
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Notion API error: ${error}`);
+    const error2 = await response.text();
+    throw new Error(`Notion API error: ${error2}`);
   }
   return response.json();
 }
 __name(createNotionTask, "createNotionTask");
 
-// workflows/scenario/automation/voice-to-anywhere.json
-var voice_to_anywhere_default = {
-  workflow_id: "voice_to_anywhere",
-  trigger: "on_voice_input",
-  actions: [
-    {
-      type: "voice_to_text",
-      input_var: "voice_data",
-      output_var: "transcribed_text"
-    },
-    {
-      type: "ask_user",
-      prompt: "Where should I save this note? (note, task, message, etc)",
-      output_var: "destination_type"
-    },
-    {
-      type: "save_to",
-      destination: "{{destination_type}}",
-      content_var: "transcribed_text"
-    }
-  ]
-};
+// src/utils/logger.js
+function log(...args) {
+  console.log("[LOG]", ...args);
+}
+__name(log, "log");
+function error(...args) {
+  console.error("[ERROR]", ...args);
+}
+__name(error, "error");
 
-// workflows/scenario/automation/attach-image-to-any-post.json
-var attach_image_to_any_post_default = {
-  workflow_id: "attach_image_to_any_post",
-  trigger: "on_image_upload",
-  actions: [
-    {
-      type: "ask_user",
-      prompt: "Which post should this image be attached to?",
-      output_var: "target_post_id"
-    },
-    {
-      type: "attach_image",
-      post_id: "{{target_post_id}}",
-      image_url_var: "uploaded_image_url"
-    }
-  ]
-};
+// src/workflows/automation/voice_to_anywhere.js
+var voice_to_anywhere_exports = {};
+__export(voice_to_anywhere_exports, {
+  run: () => run
+});
+async function run({ prompt, context }) {
+  return {
+    message: "Voice-based idea recorded",
+    note: prompt,
+    target: "Notion (or elsewhere)"
+  };
+}
+__name(run, "run");
 
-// workflows/scenario/automation/content-repurpose.json
-var content_repurpose_default = {
-  workflow_id: "content_repurpose",
-  trigger: "on_user_request",
-  actions: [
-    {
-      type: "ask_user",
-      prompt: "Which content do you want to repurpose?",
-      output_var: "source_content_id"
-    },
-    {
-      type: "ask_user",
-      prompt: "What format do you want? (summary, tweet, email, etc)",
-      output_var: "target_format"
-    },
-    {
-      type: "ai_transform",
-      content_id: "{{source_content_id}}",
-      target_format: "{{target_format}}",
-      output_var: "repurposed_content"
-    },
-    {
-      type: "save_to",
-      destination: "user_selected",
-      content_var: "repurposed_content"
-    }
-  ]
-};
+// src/workflows/automation/attach_image_to_any_post.js
+var attach_image_to_any_post_exports = {};
+__export(attach_image_to_any_post_exports, {
+  run: () => run2
+});
+async function run2({ prompt, context }) {
+  return {
+    message: "Image attached to post (mock)",
+    prompt,
+    target: "Social Media Post (or elsewhere)"
+  };
+}
+__name(run2, "run");
 
-// workflows/scenario/automation/reschedule-meeting.json
-var reschedule_meeting_default = {
-  workflow_id: "reschedule_meeting",
-  trigger: "on_conflict_or_user_request",
-  actions: [
-    {
-      type: "ask_user",
-      prompt: "Which meeting do you want to reschedule?",
-      output_var: "meeting_id"
-    },
-    {
-      type: "detect_conflict",
-      meeting_id: "{{meeting_id}}",
-      output_var: "conflict_info"
-    },
-    {
-      type: "suggest_alternatives",
-      conflict_info: "{{conflict_info}}",
-      output_var: "suggested_times"
-    },
-    {
-      type: "ask_user",
-      prompt: "Which new time would you like to select?",
-      options_var: "suggested_times",
-      output_var: "selected_time"
-    },
-    {
-      type: "update_meeting",
-      meeting_id: "{{meeting_id}}",
-      new_time: "{{selected_time}}"
-    }
-  ]
-};
+// src/workflows/automation/content_repurpose.js
+var content_repurpose_exports = {};
+__export(content_repurpose_exports, {
+  run: () => run3
+});
+async function run3({ prompt, context }) {
+  return {
+    message: "Content repurposed (mock)",
+    prompt,
+    target: "Repurposed Content (e.g., LinkedIn, Blog)"
+  };
+}
+__name(run3, "run");
 
-// workflows/scenario/automation/daily-intent-digest.json
-var daily_intent_digest_default = {
-  workflow_id: "daily_intent_digest",
-  trigger: "scheduled_nightly",
-  actions: [
-    {
-      type: "gather_user_intents",
-      period: "today",
-      output_var: "intent_summary"
-    },
-    {
-      type: "notion_create",
-      database_id: "idea_bank_001",
-      properties: {
-        "Idea Title": "Daily Summary - {{today}}",
-        Idea: "{{intent_summary}}"
-      }
-    }
-  ]
-};
+// src/workflows/automation/reschedule_meeting.js
+var reschedule_meeting_exports = {};
+__export(reschedule_meeting_exports, {
+  run: () => run4
+});
+async function run4({ prompt, context }) {
+  return {
+    message: "Meeting rescheduled (mock)",
+    prompt,
+    target: "Calendar/Meeting App (or elsewhere)"
+  };
+}
+__name(run4, "run");
+
+// src/workflows/automation/daily_intent_digest.js
+var daily_intent_digest_exports = {};
+__export(daily_intent_digest_exports, {
+  run: () => run5
+});
+async function run5({ prompt, context }) {
+  return {
+    message: "Daily digest generated (mock)",
+    prompt,
+    target: "Digest/Notification (or elsewhere)"
+  };
+}
+__name(run5, "run");
+
+// src/workflows/automation/auto_tagging.js
+var auto_tagging_exports = {};
+__export(auto_tagging_exports, {
+  run: () => run6
+});
+async function run6({ prompt, context }) {
+  return {
+    message: "Auto-tagging completed (mock)",
+    prompt
+  };
+}
+__name(run6, "run");
+
+// src/workflows/automation/auto_reply.js
+var auto_reply_exports = {};
+__export(auto_reply_exports, {
+  run: () => run7
+});
+async function run7({ prompt, context }) {
+  return {
+    message: "Auto-reply sent (mock)",
+    prompt
+  };
+}
+__name(run7, "run");
 
 // src/workflow-engine.js
 var workflows = {
-  "voice_to_anywhere": voice_to_anywhere_default,
-  "attach_image_to_any_post": attach_image_to_any_post_default,
-  "content_repurpose": content_repurpose_default,
-  "reschedule_meeting": reschedule_meeting_default,
-  "daily_intent_digest": daily_intent_digest_default
+  voice_to_anywhere: voice_to_anywhere_exports,
+  attach_image_to_any_post: attach_image_to_any_post_exports,
+  content_repurpose: content_repurpose_exports,
+  reschedule_meeting: reschedule_meeting_exports,
+  daily_intent_digest: daily_intent_digest_exports,
+  auto_tagging: auto_tagging_exports,
+  auto_reply: auto_reply_exports
 };
-var actionHandlers = {
-  voice_to_text: /* @__PURE__ */ __name(async (action, context) => {
-    context.transcribed_text = await fakeVoiceToText(context.voice_data);
-  }, "voice_to_text"),
-  ask_user: /* @__PURE__ */ __name(async (action, context) => {
-    context[action.output_var] = await fakeAskUser(action.prompt);
-  }, "ask_user"),
-  save_to: /* @__PURE__ */ __name(async (action, context) => {
-    await fakeSaveTo(action.destination, context[action.content_var]);
-  }, "save_to"),
-  attach_image: /* @__PURE__ */ __name(async (action, context) => {
-    await fakeAttachImage(action.post_id, context[action.image_url_var]);
-  }, "attach_image"),
-  ai_transform: /* @__PURE__ */ __name(async (action, context) => {
-    context[action.output_var] = await fakeAITransform(
-      context[action.content_id],
-      context[action.target_format]
-    );
-  }, "ai_transform"),
-  update_meeting: /* @__PURE__ */ __name(async (action, context) => {
-    await fakeUpdateMeeting(action.meeting_id, action.new_time);
-  }, "update_meeting")
-  // ...다른 액션 타입도 추가
-};
-async function runWorkflow(workflow, triggerEvent, context = {}) {
-  if (triggerEvent !== workflow.trigger) return;
-  for (const action of workflow.actions) {
-    const handler = actionHandlers[action.type];
-    if (handler) {
-      await handler(action, context);
-    } else {
-      console.warn(`No handler for action type: ${action.type}`);
-    }
+async function runWorkflow(intent, prompt, context = {}) {
+  const workflow = workflows[intent];
+  if (!workflow || !workflow.run) {
+    error(`No workflow found for intent: ${intent}`);
+    return {
+      success: false,
+      message: `\u274C No workflow found for intent: ${intent}`
+    };
+  }
+  try {
+    log(`Running workflow for intent: ${intent}`);
+    const result = await workflow.run({ prompt, context });
+    return {
+      success: true,
+      intent,
+      prompt,
+      result
+    };
+  } catch (err) {
+    error(`Error running workflow for intent ${intent}:`, err);
+    return {
+      success: false,
+      message: `\u274C Error running workflow: ${err.message}`
+    };
   }
 }
 __name(runWorkflow, "runWorkflow");
-async function fakeVoiceToText(voiceData) {
-  return "This is a transcribed note.";
-}
-__name(fakeVoiceToText, "fakeVoiceToText");
-async function fakeAskUser(prompt) {
-  console.log(prompt);
-  return "note";
-}
-__name(fakeAskUser, "fakeAskUser");
-async function fakeSaveTo(destination, content) {
-  console.log(`Saving to ${destination}: ${content}`);
-}
-__name(fakeSaveTo, "fakeSaveTo");
-async function fakeAttachImage(postId, imageUrl) {
-  console.log(`Attaching image ${imageUrl} to post ${postId}`);
-}
-__name(fakeAttachImage, "fakeAttachImage");
-async function fakeAITransform(contentId, targetFormat) {
-  return `Transformed content ${contentId} to format ${targetFormat}`;
-}
-__name(fakeAITransform, "fakeAITransform");
-async function fakeUpdateMeeting(meetingId, newTime) {
-  console.log(`Updating meeting ${meetingId} to new time ${newTime}`);
-}
-__name(fakeUpdateMeeting, "fakeUpdateMeeting");
 
 // configs/prompt-router.json
 var prompt_router_default = {
@@ -331,103 +284,213 @@ var prompt_router_default = {
   ]
 };
 
-// src/intent-manager.js
+// src/utils/getIntentFromPrompt.js
 function getIntentFromPrompt(prompt) {
   const lowered = prompt.toLowerCase();
-  if (lowered.includes("record") || lowered.includes("voice") || lowered.includes("idea")) {
-    return "voice_to_anywhere";
+  if (prompt.includes("\uC815\uB9AC") || prompt.includes("\uC694\uC57D") || lowered.includes("summarize") || lowered.includes("summary")) {
+    return "daily_intent_digest";
   }
-  if (lowered.includes("image") || lowered.includes("attach") || lowered.includes("upload")) {
-    return "attach_image";
+  if (prompt.includes("\uC774\uBBF8\uC9C0") && prompt.includes("\uBD99\uC5EC") || lowered.includes("image") && (lowered.includes("attach") || lowered.includes("add"))) {
+    return "attach_image_to_any_post";
   }
-  if (lowered.includes("repurpose") || lowered.includes("reuse") || lowered.includes("turn this into") || lowered.includes("transform")) {
-    return "repurpose_content";
-  }
-  if (lowered.includes("reschedule") || lowered.includes("change time") || lowered.includes("postpone") || lowered.includes("move meeting")) {
+  if (prompt.includes("\uD68C\uC758") && prompt.includes("\uBCC0\uACBD") || lowered.includes("meeting") && (lowered.includes("reschedule") || lowered.includes("change"))) {
     return "reschedule_meeting";
   }
-  if (lowered.includes("summary") || lowered.includes("digest") || lowered.includes("recap of today")) {
-    return "daily_digest";
+  if (prompt.includes("\uAE30\uB85D") || prompt.includes("\uC544\uC774\uB514\uC5B4") || prompt.includes("\uC74C\uC131") || lowered.includes("record") || lowered.includes("idea") || lowered.includes("voice")) {
+    return "voice_to_anywhere";
   }
   return null;
 }
 __name(getIntentFromPrompt, "getIntentFromPrompt");
 
-// configs/workflow-router.json
-var workflow_router_default = [
-  {
-    workflow_id: "voice_to_anywhere",
-    endpoint: "http://localhost:8787/api/voice-to-anywhere"
-  },
-  {
-    workflow_id: "attach_image_to_any_post",
-    endpoint: "http://localhost:8787/api/attach-image-to-any-post"
-  },
-  {
-    workflow_id: "reschedule_meeting",
-    endpoint: "http://localhost:8787/api/reschedule-meeting"
-  },
-  {
-    workflow_id: "content_repurpose",
-    endpoint: "http://localhost:8787/api/content-repurpose"
-  },
-  {
-    workflow_id: "daily_intent_digest",
-    endpoint: "http://localhost:8787/api/daily-intent-digest"
-  }
-];
+// src/utils/oauth.js
+async function saveUserOAuthData(userId, data, env) {
+  await env.USERS_KV.put(`user:${userId}`, JSON.stringify(data));
+}
+__name(saveUserOAuthData, "saveUserOAuthData");
 
-// src/run-workflow.js
-function getEndpointFromRoute(route) {
-  const routes = Array.isArray(workflow_router_default) ? workflow_router_default : workflow_router_default.routes;
-  const match = routes.find((item) => item.workflow_id === route);
-  return match ? match.endpoint : null;
-}
-__name(getEndpointFromRoute, "getEndpointFromRoute");
-async function runWorkflowFromPrompt(prompt, context = {}) {
-  const route = getIntentFromPrompt(prompt);
-  if (!route) {
-    console.error("\u274C No matching intent found.");
-    return;
-  }
-  let endpoint = getEndpointFromRoute(route);
-  if (!endpoint) {
-    console.error(`\u274C No workflow endpoint found for route: ${route}`);
-    return;
-  }
-  const isDev = true;
-  const baseUrl = isDev ? "http://localhost:8787" : "https://api.aivelle.com";
-  if (!endpoint.startsWith("http")) {
-    endpoint = `${baseUrl}${endpoint}`;
-  }
-  const body = { user_prompt: prompt, ...context };
-  try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
+// src/oauth/google.js
+async function handleGoogleOAuthRequest(request) {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const url = new URL(request.url);
+  const baseUrl = `${url.protocol}//${url.host}`;
+  const redirectUri = `${baseUrl}/oauth/google/callback`;
+  const scope = encodeURIComponent("https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.email");
+  const state = crypto.randomUUID();
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${state}&access_type=offline&prompt=consent`;
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Google OAuth Authentication</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+          }
+          .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+          h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+          }
+          .button {
+            display: inline-block;
+            background-color: #4285f4;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+          }
+          .button:hover {
+            background-color: #357abd;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Google Authentication</h1>
+          <a href="${authUrl}" class="button">Continue with Google</a>
+        </div>
+      </body>
+    </html>
+  `;
+  return new Response(html, {
+    headers: {
+      "Content-Type": "text/html;charset=UTF-8"
     }
-    const result = await response.text();
-    console.log(`\u2705 Executed [${route}] \u2192`, result);
-    return result;
-  } catch (err) {
-    console.error(`\u274C Failed to call endpoint: ${err.message}`);
-    return null;
+  });
+}
+__name(handleGoogleOAuthRequest, "handleGoogleOAuthRequest");
+async function handleGoogleOAuthCallback(request, env) {
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code");
+  const state = url.searchParams.get("state");
+  const error2 = url.searchParams.get("error");
+  if (error2) {
+    return new Response(`Authentication Error: ${error2}`, {
+      status: 400,
+      headers: { "Content-Type": "text/html;charset=UTF-8" }
+    });
+  }
+  if (!code) {
+    return new Response("Authorization code is missing", {
+      status: 400,
+      headers: { "Content-Type": "text/html;charset=UTF-8" }
+    });
+  }
+  const baseUrl = `${url.protocol}//${url.host}`;
+  const redirectUri = `${baseUrl}/oauth/google/callback`;
+  try {
+    const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: redirectUri,
+        grant_type: "authorization_code"
+      })
+    });
+    if (!tokenRes.ok) {
+      const errorData = await tokenRes.text();
+      throw new Error(`Token exchange failed: ${errorData}`);
+    }
+    const tokenData = await tokenRes.json();
+    const userInfoRes = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`
+      }
+    });
+    if (!userInfoRes.ok) {
+      throw new Error("Failed to fetch user info");
+    }
+    const userInfo = await userInfoRes.json();
+    const userId = userInfo.email || userInfo.id;
+    await saveUserOAuthData(userId, {
+      provider: "google",
+      access_token: tokenData.access_token,
+      refresh_token: tokenData.refresh_token,
+      expires_in: tokenData.expires_in,
+      scope: tokenData.scope,
+      email: userInfo.email
+    }, env);
+    return Response.redirect(`${baseUrl}/onboarding/success`, 302);
+  } catch (error3) {
+    return new Response(`Authentication failed: ${error3.message}`, {
+      status: 500,
+      headers: { "Content-Type": "text/html;charset=UTF-8" }
+    });
   }
 }
-__name(runWorkflowFromPrompt, "runWorkflowFromPrompt");
-var testPrompt = "Can you record this idea for me?";
-runWorkflowFromPrompt(testPrompt);
+__name(handleGoogleOAuthCallback, "handleGoogleOAuthCallback");
+
+// src/oauth/notion.js
+async function handleNotionOAuthRequest(request) {
+  const clientId = process.env.NOTION_CLIENT_ID;
+  const redirectUri = "https://yourdomain.com/oauth/notion/callback";
+  const state = "random_state_string";
+  const url = `https://api.notion.com/v1/oauth/authorize?owner=user&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&state=${state}`;
+  return Response.redirect(url, 302);
+}
+__name(handleNotionOAuthRequest, "handleNotionOAuthRequest");
+async function handleNotionOAuthCallback(request, env) {
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code");
+  const tokenRes = await fetch("https://api.notion.com/v1/oauth/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: "https://yourdomain.com/oauth/notion/callback"
+    }),
+    auth: `${process.env.NOTION_CLIENT_ID}:${process.env.NOTION_CLIENT_SECRET}`
+  });
+  const tokenData = await tokenRes.json();
+  const userId = tokenData.owner?.user?.id || tokenData.workspace_id || "notion_user";
+  await saveUserOAuthData(userId, {
+    provider: "notion",
+    access_token: tokenData.access_token,
+    workspace_id: tokenData.workspace_id,
+    bot_id: tokenData.bot_id
+  }, env);
+  return Response.redirect("/onboarding/success", 302);
+}
+__name(handleNotionOAuthCallback, "handleNotionOAuthCallback");
 
 // src/index.js
 var src_default = {
   async fetch(request, env) {
     const url = new URL(request.url);
     const pathname = url.pathname;
+    if (pathname === "/oauth/google") {
+      return handleGoogleOAuthRequest(request);
+    }
+    if (pathname === "/oauth/google/callback") {
+      return handleGoogleOAuthCallback(request, env);
+    }
+    if (pathname === "/oauth/notion") {
+      return handleNotionOAuthRequest(request);
+    }
+    if (pathname === "/oauth/notion/callback") {
+      return handleNotionOAuthCallback(request, env);
+    }
     if (pathname === "/api/databases") {
       try {
         const databases = getDatabases("user_id");
@@ -484,13 +547,38 @@ var src_default = {
         return new Response(`\u274C Error: ${err.message}`, { status: 500 });
       }
     }
-    return new Response("\u2705 Hello from Personal Assistant Agent!", {
-      headers: { "Content-Type": "text/plain" }
-    });
+    if (pathname === "/" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const prompt = body.prompt || "";
+        const intent = getIntentFromPrompt(prompt);
+        if (!intent) {
+          return new Response("\u274C No matching intent found.", { status: 400 });
+        }
+        const result = await runWorkflow(intent, prompt);
+        return new Response(JSON.stringify(result), {
+          headers: { "Content-Type": "application/json" }
+        });
+      } catch (err) {
+        return new Response(`\u274C Error: ${err.message}`, { status: 500 });
+      }
+    }
+    return new Response("Not Found", { status: 404 });
   }
 };
-var testPrompt2 = "can you record this idea for me?";
-runWorkflowFromPrompt(testPrompt2);
+addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+  if (url.pathname === "/oauth/google") {
+    event.respondWith(handleGoogleOAuthRequest(event.request));
+  } else if (url.pathname === "/oauth/google/callback") {
+    event.respondWith(handleGoogleOAuthCallback(event.request, event.env));
+  } else if (url.pathname === "/oauth/notion") {
+    event.respondWith(handleNotionOAuthRequest(event.request));
+  } else if (url.pathname === "/oauth/notion/callback") {
+    event.respondWith(handleNotionOAuthCallback(event.request, event.env));
+  } else {
+  }
+});
 
 // ../../../../usr/local/lib/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
 var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
