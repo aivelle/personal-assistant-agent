@@ -1,8 +1,0 @@
-{
-  "description": "Routes parsed intents to the correct workflow.",
-  "routing_rules": {
-    "remind": "workflows/scenario/remind.json",
-    "summarize": "workflows/scenario/summarize.json",
-    "manage": "workflows/scenario/manage.json"
-  }
-}
