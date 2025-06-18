@@ -1,7 +1,10 @@
-export default async function attachImageToAnyPost(input, context) {
+export default async function attachImageToAnyPost(input) {
+  // input: { imageUrl, postId, platform, etc. }
+  console.log("🖼️ Attach Image triggered with input:", input);
+
+  // TODO: Add logic to attach image to a social post
   return {
-    message: `Image has been attached to the specified post.`,
-    inputReceived: input
+    status: "success",
+    message: "Image attached to post (mock)."
   };
 }
-
