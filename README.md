@@ -15,7 +15,7 @@ This is a lightweight, intention-based AI assistant system designed to manage an
 ```
 agent-simplified/
 ├── configs/
-│   ├── workflow-router.json
+│   ├── prompt-router.json
 │   └── apps/
 │       ├── notion.json
 │       ├── notion.calendar.json
