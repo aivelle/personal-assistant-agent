@@ -4,6 +4,7 @@ import { getDatabases, createNotionTask } from "./notion.js";
 import { workflows, runWorkflow } from "./workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
 import { runWorkflowFromPrompt } from "./run-workflow.js";
+import { getIntentFromPrompt } from "./intent-detector.js";
 
 export default {
   async fetch(request, env) {
@@ -76,8 +77,17 @@ export default {
     }
 
     // 5. Default response
-    return new Response("✅ Hello from Personal Assistant Agent!", {
-      headers: { "Content-Type": "text/plain" }
+    const body = await request.json();
+    const prompt = body.prompt || "";
+    const intent = getIntentFromPrompt(prompt);
+
+    if (!intent) {
+      return new Response("❌ No matching intent found.", { status: 400 });
+    }
+
+    const result = await runWorkflow(intent, prompt);
+    return new Response(JSON.stringify(result), {
+      headers: { "Content-Type": "application/json" },
     });
   }
 };
