@@ -78,6 +78,7 @@ export default {
 
     // Handle POST requests to the root path
     if (pathname === "/" && request.method === "POST") {
+      console.log("Root POST handler triggered", { pathname, method: request.method });
       try {
         const body = await request.json();
         const prompt = body.prompt || "";
