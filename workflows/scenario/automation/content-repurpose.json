@@ -1,0 +1,27 @@
+{
+  "workflow_id": "content_repurpose",
+  "trigger": "on_user_request",
+  "actions": [
+    {
+      "type": "ask_user",
+      "prompt": "Which content do you want to repurpose?",
+      "output_var": "source_content_id"
+    },
+    {
+      "type": "ask_user",
+      "prompt": "What format do you want? (summary, tweet, email, etc)",
+      "output_var": "target_format"
+    },
+    {
+      "type": "ai_transform",
+      "content_id": "{{source_content_id}}",
+      "target_format": "{{target_format}}",
+      "output_var": "repurposed_content"
+    },
+    {
+      "type": "save_to",
+      "destination": "user_selected",
+      "content_var": "repurposed_content"
+    }
+  ]
+} 
