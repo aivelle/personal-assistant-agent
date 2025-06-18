@@ -54,9 +54,10 @@ export async function runWorkflowFromPrompt(prompt, context = {}) {
     return;
   }
 
-  // 👉 If the endpoint is a relative path, convert it to an absolute URL for local development
-  const baseUrl = "http://localhost:8787";
-  if (endpoint.startsWith("/")) {
+  // Environment-based endpoint prefixing
+  const isDev = process.env.NODE_ENV !== "production";
+  const baseUrl = isDev ? "http://localhost:8787" : "https://api.aivelle.com";
+  if (!endpoint.startsWith("http")) {
     endpoint = `${baseUrl}${endpoint}`;
   }
 

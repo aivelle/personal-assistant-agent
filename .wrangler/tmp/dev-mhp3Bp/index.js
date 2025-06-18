@@ -357,23 +357,23 @@ __name(getIntentFromPrompt, "getIntentFromPrompt");
 var workflow_router_default = [
   {
     workflow_id: "voice_to_anywhere",
-    endpoint: "/api/voice-to-anywhere"
+    endpoint: "http://localhost:8787/api/voice-to-anywhere"
   },
   {
     workflow_id: "attach_image_to_any_post",
-    endpoint: "/api/attach-image-to-any-post"
+    endpoint: "http://localhost:8787/api/attach-image-to-any-post"
   },
   {
     workflow_id: "reschedule_meeting",
-    endpoint: "/api/reschedule-meeting"
+    endpoint: "http://localhost:8787/api/reschedule-meeting"
   },
   {
     workflow_id: "content_repurpose",
-    endpoint: "/api/content-repurpose"
+    endpoint: "http://localhost:8787/api/content-repurpose"
   },
   {
     workflow_id: "daily_intent_digest",
-    endpoint: "/api/daily-intent-digest"
+    endpoint: "http://localhost:8787/api/daily-intent-digest"
   }
 ];
 
@@ -395,8 +395,9 @@ async function runWorkflowFromPrompt(prompt, context = {}) {
     console.error(`\u274C No workflow endpoint found for route: ${route}`);
     return;
   }
-  const baseUrl = "http://localhost:8787";
-  if (endpoint.startsWith("/")) {
+  const isDev = true;
+  const baseUrl = isDev ? "http://localhost:8787" : "https://api.aivelle.com";
+  if (!endpoint.startsWith("http")) {
     endpoint = `${baseUrl}${endpoint}`;
   }
   const body = { user_prompt: prompt, ...context };
