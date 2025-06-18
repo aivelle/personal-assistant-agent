@@ -1,0 +1,8 @@
+# Cloudflare Wrangler 임시 파일
+.wrangler/tmp/
+
+# macOS Finder metadata
+src/.DS_Store
+
+# Node.js dependencies
+src/node_modules/ 
