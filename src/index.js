@@ -5,7 +5,7 @@ import { workflows, runWorkflow } from "./workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
 import { runWorkflowFromPrompt } from "./run-workflow.js";
 import { getIntentFromPrompt } from "./utils/getIntentFromPrompt.js";
-import { runWorkflowSimple } from "./run-workflow.js";
+import { runWorkflowSimple } from "./workflow-engine.js";
 
 export default {
   async fetch(request, env) {
