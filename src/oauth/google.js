@@ -5,10 +5,10 @@
 export async function handleGoogleOAuthRequest(request) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const redirectUri = 'https://yourdomain.com/oauth/google/callback';
-  const scope = 'https://www.googleapis.com/auth/calendar';
+  const scope = encodeURIComponent('https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.email');
   const state = 'random_state_string'; // TODO: CSRF 방지용 state 생성
 
-  const url = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&state=${state}&access_type=offline&prompt=consent`;
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${state}&access_type=offline&prompt=consent`;
   return Response.redirect(url, 302);
 }
 
