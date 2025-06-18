@@ -1,4 +1,4 @@
-{
+export default {
   "users": {
     "user_id": {
       "databases": {
@@ -68,4 +68,4 @@
       }
     }
   }
-}
+}; 
