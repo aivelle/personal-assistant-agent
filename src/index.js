@@ -2,13 +2,14 @@
 
 import { getDatabases, createNotionTask } from "./notion.js";
 import { workflows, runWorkflow } from "./workflow-engine.js";
+import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // 1. Return all databases (ex. /api/databases)
+    // 1. Return all databases (e.g., /api/databases)
     if (pathname === "/api/databases") {
       try {
         const databases = getDatabases("user_id");
@@ -20,7 +21,7 @@ export default {
       }
     }
 
-    // 2. Return a specific database (ex. /api/databases/Idea%20Bank)
+    // 2. Return a specific database (e.g., /api/databases/Idea%20Bank)
     if (pathname.startsWith("/api/databases/")) {
       const dbName = decodeURIComponent(pathname.replace("/api/databases/", ""));
       try {
@@ -51,12 +52,26 @@ export default {
       }
     }
 
-    // 4. Run the voice-to-anywhere workflow
-    if (pathname === "/api/voice-to-anywhere" && request.method === "POST") {
-      // 실제로는 음성 데이터 등 context를 받아야 함
-      const context = { voice_data: "샘플 음성 데이터" };
-      await runWorkflow(workflows["voice_to_anywhere"], "on_voice_input", context);
-      return new Response("Voice-to-anywhere workflow executed!", { status: 200 });
+    // 4. Route workflow by intent using prompt-router.json
+    if (pathname === "/api/route-workflow" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const intent = body.intent;
+        const route = promptRouter.routes.find(r => r.intent === intent);
+        if (!route) {
+          return new Response(`❌ No workflow mapped for intent: ${intent}`, { status: 404 });
+        }
+        const workflow = workflows[route.workflow];
+        if (!workflow) {
+          return new Response(`❌ Workflow not found: ${route.workflow}`, { status: 404 });
+        }
+        // Extend context as needed for your use case
+        const context = body.context || {};
+        await runWorkflow(workflow, workflow.trigger, context);
+        return new Response(`Workflow '${route.workflow}' executed for intent '${intent}'.`, { status: 200 });
+      } catch (err) {
+        return new Response(`❌ Error: ${err.message}`, { status: 500 });
+      }
     }
 
     // 5. Default response
