@@ -2,15 +2,22 @@
  * Google OAuth 인증 리디렉션 엔드포인트
  * GET /oauth/google
  */
+import { saveOAuthState, verifyOAuthState, saveUserOAuthData, createOAuthErrorResponse, createOAuthSuccessResponse } from '../utils/oauth.js';
+
 export async function handleGoogleOAuthRequest(request, env) {
   const clientId = env.GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    return createOAuthErrorResponse('Google OAuth client ID is not configured', 500);
+  }
+
   const url = new URL(request.url);
   const baseUrl = `${url.protocol}//${url.host}`;
   const redirectUri = `${baseUrl}/oauth/google/callback`;
   const scope = encodeURIComponent('https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.email');
   
-  // Generate a random state for CSRF protection
+  // Generate and save state for CSRF protection
   const state = crypto.randomUUID();
+  await saveOAuthState(state, env);
   
   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${state}&access_type=offline&prompt=consent`;
   
@@ -78,8 +85,6 @@ export async function handleGoogleOAuthRequest(request, env) {
  * Google OAuth 콜백 엔드포인트
  * GET /oauth/google/callback
  */
-import { saveUserOAuthData } from '../utils/oauth.js';
-
 export async function handleGoogleOAuthCallback(request, env) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
@@ -88,20 +93,18 @@ export async function handleGoogleOAuthCallback(request, env) {
 
   // Handle error from Google
   if (error) {
-    return new Response(`Authentication Error: ${error}`, {
-      status: 400,
-      headers: { 'Content-Type': 'text/html;charset=UTF-8' },
-    });
+    return createOAuthErrorResponse(`Authentication Error: ${error}`);
   }
 
   if (!code) {
-    return new Response('Authorization code is missing', {
-      status: 400,
-      headers: { 'Content-Type': 'text/html;charset=UTF-8' },
-    });
+    return createOAuthErrorResponse('Authorization code is missing');
   }
 
-  // TODO: Verify state parameter to prevent CSRF attacks
+  // Verify state parameter to prevent CSRF attacks
+  const isValidState = await verifyOAuthState(state, env);
+  if (!isValidState) {
+    return createOAuthErrorResponse('Invalid state parameter');
+  }
   
   const baseUrl = `${url.protocol}//${url.host}`;
   const redirectUri = `${baseUrl}/oauth/google/callback`;
@@ -151,12 +154,9 @@ export async function handleGoogleOAuthCallback(request, env) {
       email: userInfo.email
     }, env);
 
-    // Redirect to success page
-    return Response.redirect(`${baseUrl}/onboarding/success`, 302);
+    // Return success page
+    return createOAuthSuccessResponse('Successfully authenticated with Google!');
   } catch (error) {
-    return new Response(`Authentication failed: ${error.message}`, {
-      status: 500,
-      headers: { 'Content-Type': 'text/html;charset=UTF-8' },
-    });
+    return createOAuthErrorResponse(`Authentication failed: ${error.message}`, 500);
   }
 } 
