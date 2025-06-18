@@ -13,7 +13,21 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // 1. Return all databases (e.g., /api/databases)
+    // OAuth routes
+    if (pathname === '/oauth/google') {
+      return handleGoogleOAuthRequest(request);
+    } 
+    if (pathname === '/oauth/google/callback') {
+      return handleGoogleOAuthCallback(request, env);
+    } 
+    if (pathname === '/oauth/notion') {
+      return handleNotionOAuthRequest(request);
+    } 
+    if (pathname === '/oauth/notion/callback') {
+      return handleNotionOAuthCallback(request, env);
+    }
+
+    // API routes
     if (pathname === "/api/databases") {
       try {
         const databases = getDatabases("user_id");
@@ -25,7 +39,6 @@ export default {
       }
     }
 
-    // 2. Return a specific database (e.g., /api/databases/Idea%20Bank)
     if (pathname.startsWith("/api/databases/")) {
       const dbName = decodeURIComponent(pathname.replace("/api/databases/", ""));
       try {
@@ -42,7 +55,6 @@ export default {
       }
     }
 
-    // 3. Create a new Task in Notion
     if (pathname === "/api/create-task" && request.method === "POST") {
       try {
         const body = await request.json();
@@ -56,7 +68,6 @@ export default {
       }
     }
 
-    // 4. Route workflow by intent using prompt-router.json
     if (pathname === "/api/route-workflow" && request.method === "POST") {
       try {
         const body = await request.json();
@@ -69,7 +80,6 @@ export default {
         if (!workflow) {
           return new Response(`❌ Workflow not found: ${route.workflow}`, { status: 404 });
         }
-        // Extend context as needed for your use case
         const context = body.context || {};
         await runWorkflow(workflow, workflow.trigger, context);
         return new Response(`Workflow '${route.workflow}' executed for intent '${intent}'.`, { status: 200 });
@@ -80,7 +90,6 @@ export default {
 
     // Handle POST requests to the root path
     if (pathname === "/" && request.method === "POST") {
-      console.log("Root POST handler triggered", { pathname, method: request.method });
       try {
         const body = await request.json();
         const prompt = body.prompt || "";
@@ -90,7 +99,6 @@ export default {
           return new Response("❌ No matching intent found.", { status: 400 });
         }
 
-        // const result = await runWorkflow(intent, prompt);
         const result = await runWorkflow(intent, prompt);
         return new Response(JSON.stringify(result), {
           headers: { "Content-Type": "application/json" },
@@ -100,20 +108,8 @@ export default {
       }
     }
 
-    // 5. Default response
-    const body = await request.json();
-    const prompt = body.prompt || "";
-    const intent = getIntentFromPrompt(prompt);
-
-    if (!intent) {
-      return new Response("❌ No matching intent found.", { status: 400 });
-    }
-
-    // const result = await runWorkflow(intent, prompt);
-    const result = await runWorkflow(intent, prompt);
-    return new Response(JSON.stringify(result), {
-      headers: { "Content-Type": "application/json" },
-    });
+    // Default response for unmatched routes
+    return new Response("Not Found", { status: 404 });
   }
 };
 
