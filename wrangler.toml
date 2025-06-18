@@ -6,4 +6,4 @@ compatibility_date = "2025-06-01"
 
 [[kv_namespaces]]
 binding = "USERS_KV"
-id = "<YOUR_KV_NAMESPACE_ID>"
+id = "09653d527f3a46688c1ed5cf2bca446c"
