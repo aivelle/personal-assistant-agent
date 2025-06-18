@@ -1,6 +1,7 @@
 // src/index.js
 
 import { getDatabases, createNotionTask } from "./notion.js";
+import { workflows, runWorkflow } from "./workflow-engine.js";
 
 export default {
   async fetch(request, env) {
@@ -50,7 +51,15 @@ export default {
       }
     }
 
-    // 4. Default response
+    // 4. Run the voice-to-anywhere workflow
+    if (pathname === "/api/voice-to-anywhere" && request.method === "POST") {
+      // 실제로는 음성 데이터 등 context를 받아야 함
+      const context = { voice_data: "샘플 음성 데이터" };
+      await runWorkflow(workflows["voice_to_anywhere"], "on_voice_input", context);
+      return new Response("Voice-to-anywhere workflow executed!", { status: 200 });
+    }
+
+    // 5. Default response
     return new Response("✅ Hello from Personal Assistant Agent!", {
       headers: { "Content-Type": "text/plain" }
     });

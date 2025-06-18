@@ -1,36 +1,22 @@
-{
-  "routes": [
-    {
-      "prompt_keywords": ["write", "compose", "draft"],
-      "route": "create"
-    },
-    {
-      "prompt_keywords": ["summarize", "recap", "brief"],
-      "route": "summarize"
-    },
-    {
-      "prompt_keywords": ["remind", "notify me", "reminder"],
-      "route": "remind"
-    },
-    {
-      "prompt_keywords": ["update", "modify", "change", "reschedule", "reschedule task"],
-      "route": "manage"
-    },
-    {
-      "prompt_keywords": ["analyze", "why", "insight"],
-      "route": "insight"
-    },
-    {
-      "prompt_keywords": ["suggest", "recommend", "what's better", "option"],
-      "route": "suggest"
-    },
-    {
-      "prompt_keywords": ["find", "show notes", "fetch", "search", "document"],
-      "route": "retrieve"
-    },
-    {
-      "prompt_keywords": ["choose", "pick", "decide", "help me choose"],
-      "route": "interact"
-    }
-  ]
-}
+[
+  {
+    "workflow_id": "voice_to_anywhere",
+    "endpoint": "/api/voice-to-anywhere"
+  },
+  {
+    "workflow_id": "attach_image_to_any_post",
+    "endpoint": "/api/attach-image-to-any-post"
+  },
+  {
+    "workflow_id": "reschedule_meeting",
+    "endpoint": "/api/reschedule-meeting"
+  },
+  {
+    "workflow_id": "content_repurpose",
+    "endpoint": "/api/content-repurpose"
+  },
+  {
+    "workflow_id": "daily_intent_digest",
+    "endpoint": "/api/daily-intent-digest"
+  }
+]
