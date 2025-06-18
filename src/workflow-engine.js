@@ -1,10 +1,10 @@
 // src/workflow-engine.js
 
-import voiceToAnywhere from '../workflows/scenario/automation/voice-to-anywhere.json' assert { type: 'json' };
-import attachImageToAnyPost from '../workflows/scenario/automation/attach-image-to-any-post.json' assert { type: 'json' };
-import contentRepurpose from '../workflows/scenario/automation/content-repurpose.json' assert { type: 'json' };
-import rescheduleMeeting from '../workflows/scenario/automation/reschedule-meeting.json' assert { type: 'json' };
-import dailyIntentDigest from '../workflows/scenario/automation/daily-intent-digest.json' assert { type: 'json' };
+import voiceToAnywhere from './workflows/Interact/voice_to_anywhere.js';
+import attachImageToAnyPost from './workflows/Create/attach_image_to_any_post.js';
+import contentRepurpose from './workflows/Create/content_repurpose.js';
+import rescheduleMeeting from './workflows/Create/reschedule_meeting.js';
+import dailyIntentDigest from './workflows/Remind/daily_intent_digest.js';
 
 const workflows = {
   'voice_to_anywhere': voiceToAnywhere,
@@ -45,16 +45,25 @@ const actionHandlers = {
  * Executes the real workflow for the given intent and prompt.
  * @param {string} intent - The workflow intent
  * @param {string} prompt - The user prompt
- * @returns {Promise<object>} - Workflow execution result (placeholder)
+ * @returns {Promise<object>} - Workflow execution result
  */
 export async function runWorkflow(intent, prompt) {
-  console.log(`Running real workflow for ${intent}`);
-  // Real workflow execution logic (to be added later)
-  return {
-    message: "Real workflow logic coming soon",
-    intent,
-    prompt,
-  };
+  if (intent === "voice_to_anywhere") {
+    return await voiceToAnywhere({ prompt });
+  }
+  if (intent === "attach_image_to_any_post") {
+    return await attachImageToAnyPost({ prompt });
+  }
+  if (intent === "content_repurpose") {
+    return await contentRepurpose({ prompt });
+  }
+  if (intent === "reschedule_meeting") {
+    return await rescheduleMeeting({ prompt });
+  }
+  if (intent === "daily_intent_digest") {
+    return await dailyIntentDigest({ prompt });
+  }
+  return { message: "Intent recognized but no handler yet.", intent };
 }
 
 /**
