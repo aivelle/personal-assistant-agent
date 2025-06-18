@@ -1,6 +1,6 @@
 import { workflows, runWorkflow } from "./workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
-import { getIntentFromPrompt } from "./utils/getIntentFromPrompt.js";
+import { getIntentFromPrompt } from "./src/utils/getIntentFromPrompt.js";
 import workflowRouter from "../configs/workflow-router.json" assert { type: 'json' };
 
 /**
