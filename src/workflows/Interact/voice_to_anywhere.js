@@ -1,7 +1,11 @@
-export default async function voiceToAnywhere(input, context) {
+export default async function voiceToAnywhere(input) {
+  // input: { text, metadata, etc. }
+  console.log("🗣️ Voice to Anywhere triggered with input:", input);
+
+  // TODO: Add real logic here
   return {
-    message: `Voice captured and sent to the specified target.`,
-    inputReceived: input
+    status: "success",
+    message: "Voice message received and processed (mock)."
   };
 }
 
