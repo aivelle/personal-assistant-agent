@@ -127,11 +127,11 @@ addEventListener('fetch', event => {
   if (url.pathname === '/oauth/google') {
     event.respondWith(handleGoogleOAuthRequest(event.request));
   } else if (url.pathname === '/oauth/google/callback') {
-    event.respondWith(handleGoogleOAuthCallback(event.request));
+    event.respondWith(handleGoogleOAuthCallback(event.request, event.env));
   } else if (url.pathname === '/oauth/notion') {
     event.respondWith(handleNotionOAuthRequest(event.request));
   } else if (url.pathname === '/oauth/notion/callback') {
-    event.respondWith(handleNotionOAuthCallback(event.request));
+    event.respondWith(handleNotionOAuthCallback(event.request, event.env));
   } else {
     // ... 기존 라우팅 ...
   }

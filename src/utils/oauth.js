@@ -1,40 +1,33 @@
 // src/utils/oauth.js
 
-// NOTE: Cloudflare Workers 환경에서는 KV, Durable Objects, 혹은 외부 DB를 권장합니다.
-// 아래는 파일 기반 예시(로컬 개발용). 실제 서비스에서는 KV로 대체 필요.
-
-import fs from 'fs/promises';
-const USERS_PATH = './configs/users.json';
+// Cloudflare Workers 환경에서는 KV 네임스페이스를 사용해야 합니다.
+// wrangler.toml에 다음과 같이 바인딩 필요:
+// [[kv_namespaces]]
+// binding = "USERS_KV"
+// id = "..."
 
 /**
- * 사용자 정보(users.json)에 토큰/정보 저장
+ * 사용자 정보(users) KV에 토큰/정보 저장
  * @param {string} userId
  * @param {object} data (access_token, refresh_token, workspace_id 등)
+ * @param {object} env (Cloudflare Workers 환경 변수)
  */
-export async function saveUserOAuthData(userId, data) {
-  let users = {};
-  try {
-    const raw = await fs.readFile(USERS_PATH, 'utf-8');
-    users = JSON.parse(raw);
-  } catch (e) {
-    // 파일 없으면 새로 생성
-    users = {};
-  }
-  users[userId] = { ...(users[userId] || {}), ...data };
-  await fs.writeFile(USERS_PATH, JSON.stringify(users, null, 2));
+export async function saveUserOAuthData(userId, data, env) {
+  await env.USERS_KV.put(`user:${userId}`, JSON.stringify(data));
 }
 
 /**
- * 사용자 정보(users.json)에서 토큰/정보 불러오기
+ * 사용자 정보(users) KV에서 토큰/정보 불러오기
  * @param {string} userId
+ * @param {object} env (Cloudflare Workers 환경 변수)
  * @returns {object|null}
  */
-export async function getUserOAuthData(userId) {
-  try {
-    const raw = await fs.readFile(USERS_PATH, 'utf-8');
-    const users = JSON.parse(raw);
-    return users[userId] || null;
-  } catch (e) {
-    return null;
-  }
-} 
+export async function getUserOAuthData(userId, env) {
+  const raw = await env.USERS_KV.get(`user:${userId}`);
+  return raw ? JSON.parse(raw) : null;
+}
+
+// (로컬 개발용 파일 기반 예시는 주석 처리)
+// import fs from 'fs/promises';
+// const USERS_PATH = './configs/users.json';
+// ... 기존 파일 기반 함수 ... 

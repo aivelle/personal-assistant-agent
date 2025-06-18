@@ -17,7 +17,7 @@ export async function handleNotionOAuthRequest(request) {
  */
 import { saveUserOAuthData } from '../utils/oauth.js';
 
-export async function handleNotionOAuthCallback(request) {
+export async function handleNotionOAuthCallback(request, env) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   // TODO: 에러 처리, state 검증 등
@@ -42,7 +42,7 @@ export async function handleNotionOAuthCallback(request) {
     access_token: tokenData.access_token,
     workspace_id: tokenData.workspace_id,
     bot_id: tokenData.bot_id
-  });
+  }, env);
 
   // 인증 성공 후 프론트엔드로 리디렉션
   return Response.redirect('/onboarding/success', 302);

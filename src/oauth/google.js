@@ -18,7 +18,7 @@ export async function handleGoogleOAuthRequest(request) {
  */
 import { saveUserOAuthData } from '../utils/oauth.js';
 
-export async function handleGoogleOAuthCallback(request) {
+export async function handleGoogleOAuthCallback(request, env) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   // TODO: 에러 처리, state 검증 등
@@ -45,7 +45,7 @@ export async function handleGoogleOAuthCallback(request) {
     refresh_token: tokenData.refresh_token,
     expires_in: tokenData.expires_in,
     scope: tokenData.scope
-  });
+  }, env);
 
   // 인증 성공 후 프론트엔드로 리디렉션
   return Response.redirect('/onboarding/success', 302);
