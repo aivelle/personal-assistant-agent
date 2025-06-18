@@ -41,17 +41,34 @@ const actionHandlers = {
   // ...다른 액션 타입도 추가
 };
 
-// 워크플로우 실행기
-export async function runWorkflow(workflow, triggerEvent, context = {}) {
-  if (triggerEvent !== workflow.trigger) return;
-  for (const action of workflow.actions) {
-    const handler = actionHandlers[action.type];
-    if (handler) {
-      await handler(action, context);
-    } else {
-      console.warn(`No handler for action type: ${action.type}`);
-    }
-  }
+/**
+ * Executes the real workflow for the given intent and prompt.
+ * @param {string} intent - The workflow intent
+ * @param {string} prompt - The user prompt
+ * @returns {Promise<object>} - Workflow execution result (placeholder)
+ */
+export async function runWorkflow(intent, prompt) {
+  console.log(`Running real workflow for ${intent}`);
+  // Real workflow execution logic (to be added later)
+  return {
+    message: "Real workflow logic coming soon",
+    intent,
+    prompt,
+  };
+}
+
+/**
+ * Simple workflow runner for testing/demo purposes.
+ * @param {string} intent - The workflow intent
+ * @param {string} prompt - The user prompt
+ * @returns {Promise<object>} - Simple workflow result
+ */
+export async function runWorkflowSimple(intent, prompt) {
+  return {
+    message: "Workflow triggered (simple)",
+    intent,
+    prompt,
+  };
 }
 
 // 실제 액션 함수 샘플 (실서비스에서는 외부 API/DB 연동)
