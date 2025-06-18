@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "description": "Summarize and deliver a daily digest of all user intents, tasks, and notifications.",
+    "intention": "digest",
+    "input_type": "daily",
+    "output_type": "summary"
+  },
+  "steps": [
+    { "type": "collect", "role": "gather_intents", "source": "all" },
+    { "type": "ai_summarize", "role": "summary" },
+    { "type": "deliver", "role": "send_digest", "destination": "user" }
+  ]
+} 
