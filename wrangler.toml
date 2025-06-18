@@ -2,7 +2,7 @@ name = "personal-assistant-agent"
 account_id = "28a29a934ac59a2e7887972b9cb042e2"
 main = "src/index.js"
 workers_dev = true
-compatibility_date = "2025-06-01"
+compatibility_date = "2025-05-25"
 
 [[kv_namespaces]]
 binding = "USERS_KV"
@@ -11,6 +11,8 @@ id = "09653d527f3a46688c1ed5cf2bca446c"
 
 [vars]
 ENVIRONMENT = "production"
+GOOGLE_CLIENT_ID = "your_google_client_id"
+GOOGLE_CLIENT_SECRET = "your_google_client_secret"
 
 [triggers]
 crons = []

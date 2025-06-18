@@ -15,13 +15,13 @@ export default {
 
     // OAuth routes
     if (pathname === '/oauth/google') {
-      return handleGoogleOAuthRequest(request);
+      return handleGoogleOAuthRequest(request, env);
     } 
     if (pathname === '/oauth/google/callback') {
       return handleGoogleOAuthCallback(request, env);
     } 
     if (pathname === '/oauth/notion') {
-      return handleNotionOAuthRequest(request);
+      return handleNotionOAuthRequest(request, env);
     } 
     if (pathname === '/oauth/notion/callback') {
       return handleNotionOAuthCallback(request, env);
@@ -121,11 +121,11 @@ export default {
 addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   if (url.pathname === '/oauth/google') {
-    event.respondWith(handleGoogleOAuthRequest(event.request));
+    event.respondWith(handleGoogleOAuthRequest(event.request, event.env));
   } else if (url.pathname === '/oauth/google/callback') {
     event.respondWith(handleGoogleOAuthCallback(event.request, event.env));
   } else if (url.pathname === '/oauth/notion') {
-    event.respondWith(handleNotionOAuthRequest(event.request));
+    event.respondWith(handleNotionOAuthRequest(event.request, event.env));
   } else if (url.pathname === '/oauth/notion/callback') {
     event.respondWith(handleNotionOAuthCallback(event.request, event.env));
   } else {

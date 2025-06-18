@@ -310,8 +310,8 @@ async function saveUserOAuthData(userId, data, env) {
 __name(saveUserOAuthData, "saveUserOAuthData");
 
 // src/oauth/google.js
-async function handleGoogleOAuthRequest(request) {
-  const clientId = process.env.GOOGLE_CLIENT_ID;
+async function handleGoogleOAuthRequest(request, env) {
+  const clientId = env.GOOGLE_CLIENT_ID;
   const url = new URL(request.url);
   const baseUrl = `${url.protocol}//${url.host}`;
   const redirectUri = `${baseUrl}/oauth/google/callback`;
@@ -401,8 +401,8 @@ async function handleGoogleOAuthCallback(request, env) {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        client_id: env.GOOGLE_CLIENT_ID,
+        client_secret: env.GOOGLE_CLIENT_SECRET,
         redirect_uri: redirectUri,
         grant_type: "authorization_code"
       })
@@ -480,13 +480,13 @@ var src_default = {
     const url = new URL(request.url);
     const pathname = url.pathname;
     if (pathname === "/oauth/google") {
-      return handleGoogleOAuthRequest(request);
+      return handleGoogleOAuthRequest(request, env);
     }
     if (pathname === "/oauth/google/callback") {
       return handleGoogleOAuthCallback(request, env);
     }
     if (pathname === "/oauth/notion") {
-      return handleNotionOAuthRequest(request);
+      return handleNotionOAuthRequest(request, env);
     }
     if (pathname === "/oauth/notion/callback") {
       return handleNotionOAuthCallback(request, env);
@@ -569,11 +569,11 @@ var src_default = {
 addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (url.pathname === "/oauth/google") {
-    event.respondWith(handleGoogleOAuthRequest(event.request));
+    event.respondWith(handleGoogleOAuthRequest(event.request, event.env));
   } else if (url.pathname === "/oauth/google/callback") {
     event.respondWith(handleGoogleOAuthCallback(event.request, event.env));
   } else if (url.pathname === "/oauth/notion") {
-    event.respondWith(handleNotionOAuthRequest(event.request));
+    event.respondWith(handleNotionOAuthRequest(event.request, event.env));
   } else if (url.pathname === "/oauth/notion/callback") {
     event.respondWith(handleNotionOAuthCallback(event.request, event.env));
   } else {

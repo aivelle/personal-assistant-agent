@@ -2,8 +2,8 @@
  * Google OAuth 인증 리디렉션 엔드포인트
  * GET /oauth/google
  */
-export async function handleGoogleOAuthRequest(request) {
-  const clientId = process.env.GOOGLE_CLIENT_ID;
+export async function handleGoogleOAuthRequest(request, env) {
+  const clientId = env.GOOGLE_CLIENT_ID;
   const url = new URL(request.url);
   const baseUrl = `${url.protocol}//${url.host}`;
   const redirectUri = `${baseUrl}/oauth/google/callback`;
@@ -113,8 +113,8 @@ export async function handleGoogleOAuthCallback(request, env) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        client_id: env.GOOGLE_CLIENT_ID,
+        client_secret: env.GOOGLE_CLIENT_SECRET,
         redirect_uri: redirectUri,
         grant_type: 'authorization_code'
       })
