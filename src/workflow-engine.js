@@ -1,11 +1,12 @@
 // src/workflow-engine.js
 
+import { log, error as logError } from "./utils/logger.js";
 import * as voiceToAnywhere from "./workflows/voice_to_anywhere.js";
 import * as attachImageToAnyPost from "./workflows/attach_image_to_any_post.js";
 import * as contentRepurpose from "./workflows/content_repurpose.js";
 import * as rescheduleMeeting from "./workflows/reschedule_meeting.js";
 import * as dailyIntentDigest from "./workflows/daily_intent_digest.js";
-// TODO: Support dynamic import for new workflows
+// TODO: Support dynamic import for new workflows (e.g., import.meta.glob or build script)
 
 const workflows = {
   voice_to_anywhere: voiceToAnywhere,
@@ -25,6 +26,7 @@ const workflows = {
 export async function runWorkflow(intent, prompt, context = {}) {
   const workflow = workflows[intent];
   if (!workflow || !workflow.run) {
+    logError(`No workflow found for intent: ${intent}`);
     return {
       success: false,
       message: `❌ No workflow found for intent: ${intent}`,
@@ -32,6 +34,7 @@ export async function runWorkflow(intent, prompt, context = {}) {
   }
 
   try {
+    log(`Running workflow for intent: ${intent}`);
     const result = await workflow.run({ prompt, context });
     return {
       success: true,
@@ -40,6 +43,7 @@ export async function runWorkflow(intent, prompt, context = {}) {
       result,
     };
   } catch (err) {
+    logError(`Error running workflow for intent ${intent}:`, err);
     return {
       success: false,
       message: `❌ Error running workflow: ${err.message}`,
