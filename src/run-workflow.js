@@ -48,10 +48,16 @@ export async function runWorkflowFromPrompt(prompt, context = {}) {
     return;
   }
 
-  const endpoint = getEndpointFromRoute(route);
+  let endpoint = getEndpointFromRoute(route);
   if (!endpoint) {
     console.error(`❌ No workflow endpoint found for route: ${route}`);
     return;
+  }
+
+  // 👉 If the endpoint is a relative path, convert it to an absolute URL for local development
+  const baseUrl = "http://localhost:8787";
+  if (endpoint.startsWith("/")) {
+    endpoint = `${baseUrl}${endpoint}`;
   }
 
   // Merge prompt and context for the request body
