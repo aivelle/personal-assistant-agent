@@ -17,5 +17,5 @@ crons = []
 
 # Custom domain configuration
 [[routes]]
-pattern = "api.aivelle.com/*"
+pattern = "aivelle.com/*"
 zone_id = "25bfeae0a291ab9d467fec3117a64c85"
