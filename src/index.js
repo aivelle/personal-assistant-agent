@@ -5,6 +5,7 @@ import promptRouter from "../configs/prompt-router.json" assert { type: 'json' }
 import { runWorkflowFromPrompt } from "./run-workflow.js";
 import { getIntentFromPrompt } from "./utils/getIntentFromPrompt.js";
 import { handleGoogleOAuthRequest, handleGoogleOAuthCallback } from './oauth/google.js';
+import { handleNotionOAuthRequest, handleNotionOAuthCallback } from './oauth/notion.js';
 import logger from './utils/logger.js';
 
 export default {
@@ -73,6 +74,12 @@ export default {
       } 
       if (pathname === '/oauth/google/callback') {
         return await handleGoogleOAuthCallback(request, env, responseHeaders);
+      }
+      if (pathname === '/oauth/notion') {
+        return await handleNotionOAuthRequest(request, env, responseHeaders);
+      }
+      if (pathname === '/oauth/notion/callback') {
+        return await handleNotionOAuthCallback(request, env, responseHeaders);
       }
 
       // API routes

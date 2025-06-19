@@ -18,6 +18,7 @@ const LOG_COLORS = {
 class Logger {
   constructor() {
     this.logLevel = LOG_LEVELS.INFO;
+    this.isDevelopment = false; // Cloudflare Workers에서는 항상 false
   }
 
   setLogLevel(level) {
@@ -49,15 +50,9 @@ class Logger {
     if (!this.shouldLog(level)) return;
 
     const formattedLog = this.formatMessage(level, message, meta);
-    const color = LOG_COLORS[level];
     
-    // 개발 환경에서는 컬러로 출력
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`${color}[${formattedLog.timestamp}] [${level}] [${formattedLog.requestId}] ${message}${LOG_COLORS.RESET}`);
-    } else {
-      // 프로덕션에서는 JSON 형식으로 출력 (Cloudflare Workers logs에서 파싱하기 쉽게)
-      console.log(JSON.stringify(formattedLog));
-    }
+    // Cloudflare Workers에서는 항상 JSON 형식으로 출력
+    console.log(JSON.stringify(formattedLog));
   }
 
   debug(message, meta = {}) {
@@ -110,10 +105,5 @@ class Logger {
 
 // 싱글톤 인스턴스 생성
 const logger = new Logger();
-
-// 환경 변수에 따라 로그 레벨 설정
-if (process.env.LOG_LEVEL) {
-  logger.setLogLevel(process.env.LOG_LEVEL);
-}
 
 export default logger; 

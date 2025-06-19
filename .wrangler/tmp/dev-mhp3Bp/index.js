@@ -5,121 +5,90 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// configs/databases.js
-var databases_default = {
-  "users": {
-    "user_id": {
-      "databases": {
-        "Idea Bank": {
-          "database_id": "idea_bank_001",
-          "notion_link": "https://www.notion.so/your_database_id_here",
-          "purpose": "Stores and categorizes creative ideas",
-          "property_mapping": {
-            "Idea Title": "title",
-            "Date Added": "created_time",
-            "Status": "status",
-            "Category": "area",
-            "Idea Content": "idea_text"
-          }
-        },
-        "Social Media Planner": {
-          "database_id": "social_media_001",
-          "notion_link": "https://www.notion.so/your_database_id_here",
-          "purpose": "Plans and schedules social media content",
-          "property_mapping": {
-            "Post Title": "title",
-            "Date": "created_date",
-            "Platform": "platform",
-            "Status": "status",
-            "Visuals Needed": "visual_required",
-            "Scheduled Time": "scheduled_time",
-            "Attachment": "media_attachment"
-          }
-        },
-        "Projects": {
-          "database_id": "projects_001",
-          "notion_link": "https://www.notion.so/your_database_id_here",
-          "purpose": "Tracks project progress and related tasks",
-          "property_mapping": {
-            "Project Title": "title",
-            "Status": "status",
-            "Owner": "owner",
-            "Date Range": "date_range",
-            "Priority": "priority",
-            "Completion % (Auto)": "completion_rollup"
-          }
-        },
-        "Tasks": {
-          "database_id": "tasks_001",
-          "notion_link": "https://www.notion.so/your_database_id_here",
-          "purpose": "Manages actionable tasks linked to projects",
-          "property_mapping": {
-            "Task Title": "title",
-            "Status": "status",
-            "Due Date": "due_date",
-            "Priority": "priority",
-            "Category": "area",
-            "Linked Project": "project_relation",
-            "Completed On": "completed_on",
-            "Delay (Auto)": "delay_formula"
-          }
-        },
-        "Additional DB (Optional)": {
-          "database_id": "custom_db_001",
-          "notion_link": "https://www.notion.so/your_database_id_here",
-          "purpose": "User-defined additional database",
-          "property_mapping": {
-            "Custom Title": "title",
-            "Custom Content": "content"
-          }
-        }
-      }
+// src/utils/logger.js
+var LOG_LEVELS = {
+  DEBUG: 0,
+  INFO: 1,
+  WARN: 2,
+  ERROR: 3,
+  FATAL: 4
+};
+var Logger = class {
+  static {
+    __name(this, "Logger");
+  }
+  constructor() {
+    this.logLevel = LOG_LEVELS.INFO;
+    this.isDevelopment = false;
+  }
+  setLogLevel(level) {
+    if (LOG_LEVELS[level] !== void 0) {
+      this.logLevel = LOG_LEVELS[level];
     }
   }
+  formatMessage(level, message, meta = {}) {
+    const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+    const requestId = meta.requestId || "NO_REQUEST_ID";
+    const userId = meta.userId || "NO_USER";
+    return {
+      timestamp,
+      level,
+      requestId,
+      userId,
+      message,
+      ...meta
+    };
+  }
+  shouldLog(level) {
+    return LOG_LEVELS[level] >= this.logLevel;
+  }
+  log(level, message, meta = {}) {
+    if (!this.shouldLog(level)) return;
+    const formattedLog = this.formatMessage(level, message, meta);
+    console.log(JSON.stringify(formattedLog));
+  }
+  debug(message, meta = {}) {
+    this.log("DEBUG", message, meta);
+  }
+  info(message, meta = {}) {
+    this.log("INFO", message, meta);
+  }
+  warn(message, meta = {}) {
+    this.log("WARN", message, meta);
+  }
+  error(message, meta = {}) {
+    this.log("ERROR", message, meta);
+  }
+  fatal(message, meta = {}) {
+    this.log("FATAL", message, meta);
+  }
+  // OAuth 전용 로깅 메소드
+  oauthLog(status, message, meta = {}) {
+    const level = status === "success" ? "INFO" : "ERROR";
+    this.log(level, `[OAuth] ${message}`, {
+      ...meta,
+      oauth_status: status
+    });
+  }
+  // API 요청 로깅
+  apiRequest(method, path, meta = {}) {
+    this.info(`API Request: ${method} ${path}`, {
+      ...meta,
+      http_method: method,
+      path
+    });
+  }
+  // 성능 메트릭 로깅
+  logMetric(name, value, meta = {}) {
+    this.info(`Metric: ${name} = ${value}`, {
+      ...meta,
+      metric_name: name,
+      metric_value: value
+    });
+  }
 };
-
-// src/notion.js
-function getDatabases(userId = "user_id") {
-  if (!databases_default.users[userId] || !databases_default.users[userId].databases) {
-    throw new Error(`No databases found for user: ${userId}`);
-  }
-  return databases_default.users[userId].databases;
-}
-__name(getDatabases, "getDatabases");
-for (const [dbName, dbObj] of Object.entries(getDatabases())) {
-  console.log(`[${dbName}] - ID: ${dbObj.database_id}`);
-}
-async function createNotionTask(properties, notionToken) {
-  const databaseId = getDatabases("user_id")["Tasks"].database_id;
-  const response = await fetch("https://api.notion.com/v1/pages", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${notionToken}`,
-      "Notion-Version": "2022-06-28",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      parent: { database_id: databaseId },
-      properties
-    })
-  });
-  if (!response.ok) {
-    const error2 = await response.text();
-    throw new Error(`Notion API error: ${error2}`);
-  }
-  return response.json();
-}
-__name(createNotionTask, "createNotionTask");
-
-// src/utils/logger.js
-function log(...args) {
-  console.log("[LOG]", ...args);
-}
-__name(log, "log");
-function error(...args) {
-  console.error("[ERROR]", ...args);
-}
-__name(error, "error");
+var logger = new Logger();
+var logger_default = logger;
 
 // src/workflows/automation/voice_to_anywhere.js
 var voice_to_anywhere_exports = {};
@@ -230,14 +199,14 @@ var workflows = {
 async function runWorkflow(intent, prompt, context = {}) {
   const workflow = workflows[intent];
   if (!workflow || !workflow.run) {
-    error(`No workflow found for intent: ${intent}`);
+    logger_default.error(`No workflow found for intent: ${intent}`);
     return {
       success: false,
       message: `\u274C No workflow found for intent: ${intent}`
     };
   }
   try {
-    log(`Running workflow for intent: ${intent}`);
+    logger_default.info(`Running workflow for intent: ${intent}`);
     const result = await workflow.run({ prompt, context });
     return {
       success: true,
@@ -246,7 +215,7 @@ async function runWorkflow(intent, prompt, context = {}) {
       result
     };
   } catch (err) {
-    error(`Error running workflow for intent ${intent}:`, err);
+    logger_default.error(`Error running workflow for intent ${intent}:`, err);
     return {
       success: false,
       message: `\u274C Error running workflow: ${err.message}`
@@ -305,12 +274,26 @@ __name(getIntentFromPrompt, "getIntentFromPrompt");
 
 // src/utils/oauth.js
 var STATE_PREFIX = "oauth_state_";
+var USER_PREFIX = "oauth_user_";
 var STATE_EXPIRY = 60 * 5;
+async function kvJSON(operation, env, key, value = null, options = {}) {
+  switch (operation) {
+    case "get":
+      const data = await env.USERS_KV.get(key);
+      return data ? JSON.parse(data) : null;
+    case "put":
+      await env.USERS_KV.put(key, JSON.stringify(value), options);
+      return true;
+    default:
+      throw new Error(`Unknown KV operation: ${operation}`);
+  }
+}
+__name(kvJSON, "kvJSON");
 async function saveOAuthState(state, env) {
   const key = `${STATE_PREFIX}${state}`;
-  await env.USERS_KV.put(key, JSON.stringify({
+  return kvJSON("put", env, key, {
     created: Date.now()
-  }), {
+  }, {
     expirationTtl: STATE_EXPIRY
   });
 }
@@ -318,18 +301,23 @@ __name(saveOAuthState, "saveOAuthState");
 async function verifyOAuthState(state, env) {
   if (!state) return false;
   const key = `${STATE_PREFIX}${state}`;
-  const stored = await env.USERS_KV.get(key);
-  if (!stored) return false;
-  await env.USERS_KV.delete(key);
-  return true;
+  try {
+    const stored = await env.USERS_KV.getWithMetadata(key);
+    if (!stored.value) return false;
+    await env.USERS_KV.delete(key);
+    return true;
+  } catch (error) {
+    console.error("Error during atomic state verification:", error);
+    return false;
+  }
 }
 __name(verifyOAuthState, "verifyOAuthState");
 async function saveUserOAuthData(userId, data, env) {
-  const key = `oauth_user_${userId}`;
-  await env.USERS_KV.put(key, JSON.stringify({
+  const key = `${USER_PREFIX}${userId}`;
+  return kvJSON("put", env, key, {
     ...data,
     updated: Date.now()
-  }));
+  });
 }
 __name(saveUserOAuthData, "saveUserOAuthData");
 function createOAuthErrorResponse(message, status = 400) {
@@ -452,9 +440,47 @@ function createOAuthSuccessResponse(message = "Authentication successful!") {
 __name(createOAuthSuccessResponse, "createOAuthSuccessResponse");
 
 // src/oauth/google.js
-async function handleGoogleOAuthRequest(request, env) {
+async function handleGoogleOAuthRequest(request, env, responseHeaders = {}) {
+  const headers = request.headers;
+  const userAgent = headers.get("User-Agent") || "";
+  const requestId = headers.get("X-Request-ID") || crypto.randomUUID();
+  const referer = headers.get("Referer") || "";
+  const clientIp = headers.get("CF-Connecting-IP") || "";
+  const meta = {
+    requestId,
+    clientIp,
+    userAgent,
+    referer
+  };
+  if (referer.includes("aivelle.com") || userAgent.includes("Aivelle-Agent")) {
+    logger_default.warn("Loop detected in Google OAuth request", {
+      ...meta,
+      reason: "loop_detected"
+    });
+    return new Response("Loop detected and blocked", {
+      status: 429,
+      headers: {
+        "X-Error-Type": "loop_detected",
+        "Retry-After": "60"
+      }
+    });
+  }
+  const depth = Number(headers.get("X-Depth") || "0");
+  if (depth > 3) {
+    logger_default.warn("Request depth exceeded in Google OAuth", {
+      ...meta,
+      depth,
+      reason: "depth_exceeded"
+    });
+    return new Response("Request depth limit exceeded", {
+      status: 400,
+      headers: { "X-Error-Type": "depth_exceeded" }
+    });
+  }
+  logger_default.apiRequest("GET", "/oauth/google", meta);
   const clientId = env.GOOGLE_CLIENT_ID;
   if (!clientId) {
+    logger_default.error("Google OAuth client ID is not configured", meta);
     return createOAuthErrorResponse("Google OAuth client ID is not configured", 500);
   }
   const url = new URL(request.url);
@@ -517,208 +543,584 @@ async function handleGoogleOAuthRequest(request, env) {
   `;
   return new Response(html, {
     headers: {
-      "Content-Type": "text/html;charset=UTF-8"
+      "Content-Type": "text/html;charset=UTF-8",
+      ...responseHeaders
     }
   });
 }
 __name(handleGoogleOAuthRequest, "handleGoogleOAuthRequest");
-async function handleGoogleOAuthCallback(request, env) {
+async function handleGoogleOAuthCallback(request, env, responseHeaders = {}) {
+  const headers = request.headers;
+  const userAgent = headers.get("User-Agent") || "";
+  const requestId = headers.get("X-Request-ID") || crypto.randomUUID();
+  const referer = headers.get("Referer") || "";
+  const clientIp = headers.get("CF-Connecting-IP") || "";
+  const meta = {
+    requestId,
+    clientIp,
+    userAgent,
+    referer
+  };
+  if (referer.includes("aivelle.com") || userAgent.includes("Aivelle-Agent")) {
+    logger_default.warn("Loop detected in Google OAuth callback", {
+      ...meta,
+      reason: "loop_detected"
+    });
+    return new Response("Loop detected and blocked", {
+      status: 429,
+      headers: {
+        "X-Error-Type": "loop_detected",
+        "Retry-After": "60"
+      }
+    });
+  }
+  const depth = Number(headers.get("X-Depth") || "0");
+  if (depth > 3) {
+    logger_default.warn("Request depth exceeded in Google OAuth callback", {
+      ...meta,
+      depth,
+      reason: "depth_exceeded"
+    });
+    return new Response("Request depth limit exceeded", {
+      status: 400,
+      headers: { "X-Error-Type": "depth_exceeded" }
+    });
+  }
+  logger_default.apiRequest("GET", "/oauth/google/callback", meta);
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  const error2 = url.searchParams.get("error");
-  if (error2) {
-    return createOAuthErrorResponse(`Authentication Error: ${error2}`);
+  const error = url.searchParams.get("error");
+  if (error) {
+    logger_default.error(`[OAuth Error] ${requestId} Google error: ${error}`, meta);
+    return createOAuthErrorResponse(`Authentication Error: ${error}`);
   }
   if (!code) {
+    logger_default.warn(`[OAuth Error] ${requestId} Missing code`, meta);
     return createOAuthErrorResponse("Authorization code is missing");
   }
   const isValidState = await verifyOAuthState(state, env);
   if (!isValidState) {
+    logger_default.warn(`[OAuth Error] ${requestId} Invalid state`, meta);
     return createOAuthErrorResponse("Invalid state parameter");
   }
   const baseUrl = `${url.protocol}//${url.host}`;
   const redirectUri = `${baseUrl}/oauth/google/callback`;
   try {
-    const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        code,
-        client_id: env.GOOGLE_CLIENT_ID,
-        client_secret: env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: redirectUri,
-        grant_type: "authorization_code"
-      })
-    });
-    if (!tokenRes.ok) {
-      const errorData = await tokenRes.text();
-      throw new Error(`Token exchange failed: ${errorData}`);
-    }
-    const tokenData = await tokenRes.json();
-    const userInfoRes = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-      headers: {
-        Authorization: `Bearer ${tokenData.access_token}`
+    let tokenData;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "Aivelle-OAuth-Client/1.0"
+          },
+          body: new URLSearchParams({
+            code,
+            client_id: env.GOOGLE_CLIENT_ID,
+            client_secret: env.GOOGLE_CLIENT_SECRET,
+            redirect_uri: redirectUri,
+            grant_type: "authorization_code"
+          })
+        });
+        if (!tokenRes.ok) {
+          const errorData = await tokenRes.text();
+          throw new Error(`Token exchange failed: ${errorData}`);
+        }
+        tokenData = await tokenRes.json();
+        break;
+      } catch (error2) {
+        if (attempt === 3) throw error2;
+        await new Promise((resolve) => setTimeout(resolve, 1e3 * attempt));
       }
-    });
-    if (!userInfoRes.ok) {
-      throw new Error("Failed to fetch user info");
     }
-    const userInfo = await userInfoRes.json();
+    let userInfo;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const userInfoRes = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+          headers: {
+            "Authorization": `Bearer ${tokenData.access_token}`,
+            "User-Agent": "Aivelle-OAuth-Client/1.0"
+          }
+        });
+        if (!userInfoRes.ok) {
+          throw new Error(`Failed to fetch user info: ${userInfoRes.status}`);
+        }
+        userInfo = await userInfoRes.json();
+        break;
+      } catch (error2) {
+        if (attempt === 3) throw error2;
+        await new Promise((resolve) => setTimeout(resolve, 1e3 * attempt));
+      }
+    }
     const userId = userInfo.email || userInfo.id;
-    await saveUserOAuthData(userId, {
-      provider: "google",
-      access_token: tokenData.access_token,
-      refresh_token: tokenData.refresh_token,
-      expires_in: tokenData.expires_in,
-      scope: tokenData.scope,
+    let saveAttempt = 0;
+    while (saveAttempt < 3) {
+      try {
+        await saveUserOAuthData(userId, {
+          provider: "google",
+          access_token: tokenData.access_token,
+          refresh_token: tokenData.refresh_token,
+          expires_in: tokenData.expires_in,
+          scope: tokenData.scope,
+          email: userInfo.email,
+          last_auth: (/* @__PURE__ */ new Date()).toISOString()
+        }, env);
+        break;
+      } catch (error2) {
+        saveAttempt++;
+        if (saveAttempt === 3) throw error2;
+        await new Promise((resolve) => setTimeout(resolve, 1e3 * saveAttempt));
+      }
+    }
+    logger_default.info(`[OAuth Success] ${requestId} User ${userId} authenticated`, {
+      ...meta,
+      user_id: userId,
       email: userInfo.email
-    }, env);
-    return createOAuthSuccessResponse("Successfully authenticated with Google!");
-  } catch (error3) {
-    return createOAuthErrorResponse(`Authentication failed: ${error3.message}`, 500);
+    });
+    const response = createOAuthSuccessResponse("Successfully authenticated with Google!");
+    response.headers = new Headers({
+      ...response.headers,
+      ...responseHeaders
+    });
+    return response;
+  } catch (error2) {
+    logger_default.error(`[OAuth Error] ${requestId} Authentication failed: ${error2.message}`, {
+      ...meta,
+      error: error2.message,
+      stack: error2.stack
+    });
+    return createOAuthErrorResponse(`Authentication failed: ${error2.message}`, 500);
   }
 }
 __name(handleGoogleOAuthCallback, "handleGoogleOAuthCallback");
 
 // src/oauth/notion.js
-async function handleNotionOAuthRequest(request) {
-  const clientId = process.env.NOTION_CLIENT_ID;
-  const redirectUri = "https://yourdomain.com/oauth/notion/callback";
-  const state = "random_state_string";
-  const url = `https://api.notion.com/v1/oauth/authorize?owner=user&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&state=${state}`;
-  return Response.redirect(url, 302);
+async function handleNotionOAuthRequest(request, env, responseHeaders = {}) {
+  const headers = request.headers;
+  const userAgent = headers.get("User-Agent") || "";
+  const requestId = headers.get("X-Request-ID") || crypto.randomUUID();
+  const referer = headers.get("Referer") || "";
+  const clientIp = headers.get("CF-Connecting-IP") || "";
+  const meta = {
+    requestId,
+    clientIp,
+    userAgent,
+    referer
+  };
+  if (referer.includes("aivelle.com") || userAgent.includes("Aivelle-Agent")) {
+    logger_default.warn("Loop detected in Notion OAuth request", {
+      ...meta,
+      reason: "loop_detected"
+    });
+    return new Response("Loop detected and blocked", {
+      status: 429,
+      headers: {
+        "X-Error-Type": "loop_detected",
+        "Retry-After": "60"
+      }
+    });
+  }
+  const depth = Number(headers.get("X-Depth") || "0");
+  if (depth > 3) {
+    logger_default.warn("Request depth exceeded in Notion OAuth", {
+      ...meta,
+      depth,
+      reason: "depth_exceeded"
+    });
+    return new Response("Request depth limit exceeded", {
+      status: 400,
+      headers: { "X-Error-Type": "depth_exceeded" }
+    });
+  }
+  logger_default.apiRequest("GET", "/oauth/notion", meta);
+  const clientId = env.NOTION_CLIENT_ID;
+  if (!clientId) {
+    logger_default.error("Notion OAuth client ID is not configured", meta);
+    return createOAuthErrorResponse("Notion OAuth client ID is not configured", 500);
+  }
+  const url = new URL(request.url);
+  const baseUrl = `${url.protocol}//${url.host}`;
+  const redirectUri = `${baseUrl}/oauth/notion/callback`;
+  const state = crypto.randomUUID();
+  await saveOAuthState(state, env);
+  const authUrl = `https://api.notion.com/v1/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&owner=user&state=${state}`;
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Notion OAuth Authentication</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+          }
+          .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+          h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+          }
+          .button {
+            display: inline-block;
+            background-color: #000000;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+          }
+          .button:hover {
+            background-color: #333333;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Notion Authentication</h1>
+          <a href="${authUrl}" class="button">Continue with Notion</a>
+        </div>
+      </body>
+    </html>
+  `;
+  return new Response(html, {
+    headers: {
+      "Content-Type": "text/html;charset=UTF-8",
+      ...responseHeaders
+    }
+  });
 }
 __name(handleNotionOAuthRequest, "handleNotionOAuthRequest");
-async function handleNotionOAuthCallback(request, env) {
+async function handleNotionOAuthCallback(request, env, responseHeaders = {}) {
+  const headers = request.headers;
+  const userAgent = headers.get("User-Agent") || "";
+  const requestId = headers.get("X-Request-ID") || crypto.randomUUID();
+  const referer = headers.get("Referer") || "";
+  const clientIp = headers.get("CF-Connecting-IP") || "";
+  const meta = {
+    requestId,
+    clientIp,
+    userAgent,
+    referer
+  };
+  if (referer.includes("aivelle.com") || userAgent.includes("Aivelle-Agent")) {
+    logger_default.warn("Loop detected in Notion OAuth callback", {
+      ...meta,
+      reason: "loop_detected"
+    });
+    return new Response("Loop detected and blocked", {
+      status: 429,
+      headers: {
+        "X-Error-Type": "loop_detected",
+        "Retry-After": "60"
+      }
+    });
+  }
+  const depth = Number(headers.get("X-Depth") || "0");
+  if (depth > 3) {
+    logger_default.warn("Request depth exceeded in Notion OAuth callback", {
+      ...meta,
+      depth,
+      reason: "depth_exceeded"
+    });
+    return new Response("Request depth limit exceeded", {
+      status: 400,
+      headers: { "X-Error-Type": "depth_exceeded" }
+    });
+  }
+  logger_default.apiRequest("GET", "/oauth/notion/callback", meta);
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
-  const tokenRes = await fetch("https://api.notion.com/v1/oauth/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      grant_type: "authorization_code",
-      code,
-      redirect_uri: "https://yourdomain.com/oauth/notion/callback"
-    }),
-    auth: `${process.env.NOTION_CLIENT_ID}:${process.env.NOTION_CLIENT_SECRET}`
-  });
-  const tokenData = await tokenRes.json();
-  const userId = tokenData.owner?.user?.id || tokenData.workspace_id || "notion_user";
-  await saveUserOAuthData(userId, {
-    provider: "notion",
-    access_token: tokenData.access_token,
-    workspace_id: tokenData.workspace_id,
-    bot_id: tokenData.bot_id
-  }, env);
-  return Response.redirect("/onboarding/success", 302);
+  const state = url.searchParams.get("state");
+  const error = url.searchParams.get("error");
+  if (error) {
+    logger_default.error(`[OAuth Error] ${requestId} Notion error: ${error}`, meta);
+    return createOAuthErrorResponse(`Authentication Error: ${error}`);
+  }
+  if (!code) {
+    logger_default.warn(`[OAuth Error] ${requestId} Missing code`, meta);
+    return createOAuthErrorResponse("Authorization code is missing");
+  }
+  const isValidState = await verifyOAuthState(state, env);
+  if (!isValidState) {
+    logger_default.warn(`[OAuth Error] ${requestId} Invalid state`, meta);
+    return createOAuthErrorResponse("Invalid state parameter");
+  }
+  const baseUrl = `${url.protocol}//${url.host}`;
+  const redirectUri = `${baseUrl}/oauth/notion/callback`;
+  try {
+    let tokenData;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const tokenRes = await fetch("https://api.notion.com/v1/oauth/token", {
+          method: "POST",
+          headers: {
+            "Authorization": `Basic ${btoa(`${env.NOTION_CLIENT_ID}:${env.NOTION_CLIENT_SECRET}`)}`,
+            "Content-Type": "application/json",
+            "Notion-Version": "2022-06-28",
+            "User-Agent": "Aivelle-OAuth-Client/1.0"
+          },
+          body: JSON.stringify({
+            grant_type: "authorization_code",
+            code,
+            redirect_uri: redirectUri
+          })
+        });
+        if (!tokenRes.ok) {
+          const errorData = await tokenRes.text();
+          throw new Error(`Token exchange failed: ${errorData}`);
+        }
+        tokenData = await tokenRes.json();
+        break;
+      } catch (error2) {
+        if (attempt === 3) throw error2;
+        await new Promise((resolve) => setTimeout(resolve, 1e3 * attempt));
+      }
+    }
+    const workspaceId = tokenData.workspace_id;
+    const botId = tokenData.bot_id;
+    const accessToken = tokenData.access_token;
+    let saveAttempt = 0;
+    while (saveAttempt < 3) {
+      try {
+        await saveUserOAuthData(workspaceId, {
+          provider: "notion",
+          access_token: accessToken,
+          bot_id: botId,
+          workspace_id: workspaceId,
+          owner: tokenData.owner,
+          workspace_name: tokenData.workspace_name,
+          workspace_icon: tokenData.workspace_icon,
+          last_auth: (/* @__PURE__ */ new Date()).toISOString()
+        }, env);
+        break;
+      } catch (error2) {
+        saveAttempt++;
+        if (saveAttempt === 3) throw error2;
+        await new Promise((resolve) => setTimeout(resolve, 1e3 * saveAttempt));
+      }
+    }
+    logger_default.info(`[OAuth Success] ${requestId} Workspace ${workspaceId} authenticated`, {
+      ...meta,
+      workspace_id: workspaceId
+    });
+    const response = createOAuthSuccessResponse("Successfully authenticated with Notion!");
+    response.headers = new Headers({
+      ...response.headers,
+      ...responseHeaders
+    });
+    return response;
+  } catch (error2) {
+    logger_default.error(`[OAuth Error] ${requestId} Authentication failed: ${error2.message}`, {
+      ...meta,
+      error: error2.message,
+      stack: error2.stack
+    });
+    return createOAuthErrorResponse(`Authentication failed: ${error2.message}`, 500);
+  }
 }
 __name(handleNotionOAuthCallback, "handleNotionOAuthCallback");
 
 // src/index.js
 var src_default = {
   async fetch(request, env) {
+    const headers = request.headers;
+    const userAgent = headers.get("User-Agent") || "";
+    const requestId = headers.get("X-Request-ID") || crypto.randomUUID();
+    const referer = headers.get("Referer") || "";
+    const clientIp = request.headers.get("CF-Connecting-IP") || "";
+    const meta = {
+      requestId,
+      clientIp,
+      userAgent,
+      referer
+    };
+    if (referer.includes("aivelle.com") || userAgent.includes("Aivelle-Agent")) {
+      logger_default.warn("Loop detected and blocked", {
+        ...meta,
+        reason: "loop_detected"
+      });
+      return new Response("Loop detected and blocked", {
+        status: 429,
+        headers: {
+          "X-Error-Type": "loop_detected",
+          "Retry-After": "60"
+        }
+      });
+    }
+    const depth = Number(headers.get("X-Depth") || "0");
+    if (depth > 3) {
+      logger_default.warn("Request depth limit exceeded", {
+        ...meta,
+        depth,
+        reason: "depth_exceeded"
+      });
+      return new Response("Request depth limit exceeded", {
+        status: 400,
+        headers: { "X-Error-Type": "depth_exceeded" }
+      });
+    }
+    logger_default.apiRequest(request.method, new URL(request.url).pathname, meta);
+    const responseHeaders = {
+      "X-Request-ID": requestId,
+      "X-Depth": (depth + 1).toString(),
+      "X-Processor": "aivelle-worker"
+    };
     const url = new URL(request.url);
     const pathname = url.pathname;
-    if (pathname === "/oauth/google") {
-      return handleGoogleOAuthRequest(request, env);
-    }
-    if (pathname === "/oauth/google/callback") {
-      return handleGoogleOAuthCallback(request, env);
-    }
-    if (pathname === "/oauth/notion") {
-      return handleNotionOAuthRequest(request, env);
-    }
-    if (pathname === "/oauth/notion/callback") {
-      return handleNotionOAuthCallback(request, env);
-    }
-    if (pathname === "/api/databases") {
-      try {
-        const databases = getDatabases("user_id");
-        return new Response(JSON.stringify(databases, null, 2), {
-          headers: { "Content-Type": "application/json" }
-        });
-      } catch (err) {
-        return new Response(`\u274C Error: ${err.message}`, { status: 500 });
+    try {
+      if (pathname === "/oauth/google") {
+        return await handleGoogleOAuthRequest(request, env, responseHeaders);
       }
-    }
-    if (pathname.startsWith("/api/databases/")) {
-      const dbName = decodeURIComponent(pathname.replace("/api/databases/", ""));
-      try {
-        const databases = getDatabases("user_id");
-        const db = databases[dbName];
-        if (!db) {
-          return new Response(`\u274C Database "${dbName}" not found`, { status: 404 });
+      if (pathname === "/oauth/google/callback") {
+        return await handleGoogleOAuthCallback(request, env, responseHeaders);
+      }
+      if (pathname === "/oauth/notion") {
+        return await handleNotionOAuthRequest(request, env, responseHeaders);
+      }
+      if (pathname === "/oauth/notion/callback") {
+        return await handleNotionOAuthCallback(request, env, responseHeaders);
+      }
+      if (pathname === "/api/route-workflow" && request.method === "POST") {
+        try {
+          const body = await request.json();
+          const intent = body.intent;
+          const route = prompt_router_default.routes.find((r) => r.intent === intent);
+          if (!route) {
+            logger_default.warn("No workflow mapped for intent", {
+              ...meta,
+              intent,
+              reason: "workflow_not_found"
+            });
+            return new Response(`\u274C No workflow mapped for intent: ${intent}`, {
+              status: 404,
+              headers: responseHeaders
+            });
+          }
+          const workflow = workflows[route.workflow];
+          if (!workflow) {
+            logger_default.warn("Workflow not found", {
+              ...meta,
+              workflow: route.workflow,
+              reason: "workflow_not_found"
+            });
+            return new Response(`\u274C Workflow not found: ${route.workflow}`, {
+              status: 404,
+              headers: responseHeaders
+            });
+          }
+          const context = body.context || {};
+          const startTime = performance.now();
+          await runWorkflow(workflow, workflow.trigger, context);
+          const endTime = performance.now();
+          logger_default.logMetric("workflow_execution_time", endTime - startTime, {
+            ...meta,
+            workflow: route.workflow
+          });
+          return new Response(`Workflow '${route.workflow}' executed for intent '${intent}'.`, {
+            status: 200,
+            headers: responseHeaders
+          });
+        } catch (err) {
+          logger_default.error("Workflow execution error", {
+            ...meta,
+            error: err.message,
+            stack: err.stack
+          });
+          return new Response(`\u274C Error: ${err.message}`, {
+            status: 500,
+            headers: responseHeaders
+          });
         }
-        return new Response(JSON.stringify(db, null, 2), {
-          headers: { "Content-Type": "application/json" }
-        });
-      } catch (err) {
-        return new Response(`\u274C Error: ${err.message}`, { status: 500 });
       }
-    }
-    if (pathname === "/api/create-task" && request.method === "POST") {
-      try {
-        const body = await request.json();
-        const notionToken = env.NOTION_API_TOKEN;
-        const result = await createNotionTask(body, notionToken);
-        return new Response(JSON.stringify(result, null, 2), {
-          headers: { "Content-Type": "application/json" }
-        });
-      } catch (err) {
-        return new Response(`\u274C Error: ${err.message}`, { status: 500 });
-      }
-    }
-    if (pathname === "/api/route-workflow" && request.method === "POST") {
-      try {
-        const body = await request.json();
-        const intent = body.intent;
-        const route = prompt_router_default.routes.find((r) => r.intent === intent);
-        if (!route) {
-          return new Response(`\u274C No workflow mapped for intent: ${intent}`, { status: 404 });
+      if (pathname === "/" && request.method === "POST") {
+        try {
+          const body = await request.json();
+          const prompt = body.prompt || "";
+          const intent = getIntentFromPrompt(prompt);
+          if (!intent) {
+            logger_default.warn("No matching intent found", {
+              ...meta,
+              prompt,
+              reason: "intent_not_found"
+            });
+            return new Response("\u274C No matching intent found.", {
+              status: 400,
+              headers: responseHeaders
+            });
+          }
+          const startTime = performance.now();
+          const result = await runWorkflow(intent, prompt);
+          const endTime = performance.now();
+          logger_default.logMetric("intent_execution_time", endTime - startTime, {
+            ...meta,
+            intent
+          });
+          return new Response(JSON.stringify(result), {
+            status: 200,
+            headers: {
+              ...responseHeaders,
+              "Content-Type": "application/json"
+            }
+          });
+        } catch (err) {
+          logger_default.error("Root path execution error", {
+            ...meta,
+            error: err.message,
+            stack: err.stack
+          });
+          return new Response(`\u274C Error: ${err.message}`, {
+            status: 500,
+            headers: responseHeaders
+          });
         }
-        const workflow = workflows[route.workflow];
-        if (!workflow) {
-          return new Response(`\u274C Workflow not found: ${route.workflow}`, { status: 404 });
-        }
-        const context = body.context || {};
-        await runWorkflow(workflow, workflow.trigger, context);
-        return new Response(`Workflow '${route.workflow}' executed for intent '${intent}'.`, { status: 200 });
-      } catch (err) {
-        return new Response(`\u274C Error: ${err.message}`, { status: 500 });
       }
+      logger_default.warn("Route not found", {
+        ...meta,
+        path: pathname,
+        reason: "route_not_found"
+      });
+      return new Response("Not Found", {
+        status: 404,
+        headers: responseHeaders
+      });
+    } catch (err) {
+      logger_default.fatal("Unhandled error", {
+        ...meta,
+        error: err.message,
+        stack: err.stack
+      });
+      return new Response("Internal Server Error", {
+        status: 500,
+        headers: responseHeaders
+      });
     }
-    if (pathname === "/" && request.method === "POST") {
-      try {
-        const body = await request.json();
-        const prompt = body.prompt || "";
-        const intent = getIntentFromPrompt(prompt);
-        if (!intent) {
-          return new Response("\u274C No matching intent found.", { status: 400 });
-        }
-        const result = await runWorkflow(intent, prompt);
-        return new Response(JSON.stringify(result), {
-          headers: { "Content-Type": "application/json" }
-        });
-      } catch (err) {
-        return new Response(`\u274C Error: ${err.message}`, { status: 500 });
-      }
-    }
-    return new Response("Not Found", { status: 404 });
   }
 };
 addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
-  if (url.pathname === "/oauth/google") {
-    event.respondWith(handleGoogleOAuthRequest(event.request, event.env));
-  } else if (url.pathname === "/oauth/google/callback") {
-    event.respondWith(handleGoogleOAuthCallback(event.request, event.env));
-  } else if (url.pathname === "/oauth/notion") {
-    event.respondWith(handleNotionOAuthRequest(event.request, event.env));
-  } else if (url.pathname === "/oauth/notion/callback") {
-    event.respondWith(handleNotionOAuthCallback(event.request, event.env));
-  } else {
-  }
+  event.respondWith(
+    handleRequest(event.request, event.env).catch((err) => {
+      logger_default.fatal("Unhandled request error", {
+        error: err.message,
+        stack: err.stack
+      });
+      return new Response("Internal Server Error", { status: 500 });
+    })
+  );
 });
 
 // ../../../../usr/local/lib/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts

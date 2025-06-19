@@ -1,6 +1,6 @@
 // src/workflow-engine.js
 
-import { log, error as logError } from "./utils/logger.js";
+import logger from "./utils/logger.js";
 import * as voiceToAnywhere from "./workflows/automation/voice_to_anywhere.js";
 import * as attachImageToAnyPost from "./workflows/automation/attach_image_to_any_post.js";
 import * as contentRepurpose from "./workflows/automation/content_repurpose.js";
@@ -30,7 +30,7 @@ const workflows = {
 export async function runWorkflow(intent, prompt, context = {}) {
   const workflow = workflows[intent];
   if (!workflow || !workflow.run) {
-    logError(`No workflow found for intent: ${intent}`);
+    logger.error(`No workflow found for intent: ${intent}`);
     return {
       success: false,
       message: `❌ No workflow found for intent: ${intent}`,
@@ -38,7 +38,7 @@ export async function runWorkflow(intent, prompt, context = {}) {
   }
 
   try {
-    log(`Running workflow for intent: ${intent}`);
+    logger.info(`Running workflow for intent: ${intent}`);
     const result = await workflow.run({ prompt, context });
     return {
       success: true,
@@ -47,7 +47,7 @@ export async function runWorkflow(intent, prompt, context = {}) {
       result,
     };
   } catch (err) {
-    logError(`Error running workflow for intent ${intent}:`, err);
+    logger.error(`Error running workflow for intent ${intent}:`, err);
     return {
       success: false,
       message: `❌ Error running workflow: ${err.message}`,
