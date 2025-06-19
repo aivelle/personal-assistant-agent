@@ -1,22 +1,22 @@
 [
   {
     "workflow_id": "voice_to_anywhere",
-    "endpoint": "/voice-to-anywhere"
+    "endpoint": "/api/voice-to-anywhere"
   },
   {
     "workflow_id": "attach_image_to_any_post",
-    "endpoint": "/attach-image-to-any-post"
+    "endpoint": "/api/attach-image-to-any-post"
   },
   {
     "workflow_id": "reschedule_meeting",
-    "endpoint": "/reschedule-meeting"
+    "endpoint": "/api/reschedule-meeting"
   },
   {
     "workflow_id": "content_repurpose",
-    "endpoint": "/content-repurpose"
+    "endpoint": "/api/content-repurpose"
   },
   {
     "workflow_id": "daily_intent_digest",
-    "endpoint": "/daily-intent-digest"
+    "endpoint": "/api/daily-intent-digest"
   }
 ]
