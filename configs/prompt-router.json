@@ -5,23 +5,28 @@
   "routes": [
     {
       "intent": "voice_to_anywhere",
-      "workflow": "voice_to_anywhere"
+      "workflow": "voice_to_anywhere",
+      "endpoint": "http://localhost:8787/api/voice-to-anywhere"
     },
     {
       "intent": "attach_image",
-      "workflow": "attach_image_to_any_post"
+      "workflow": "attach_image_to_any_post",
+      "endpoint": "http://localhost:8787/api/attach-image-to-any-post"
     },
     {
       "intent": "repurpose_content",
-      "workflow": "content_repurpose"
+      "workflow": "content_repurpose",
+      "endpoint": "http://localhost:8787/api/content-repurpose"
     },
     {
       "intent": "reschedule_meeting",
-      "workflow": "reschedule_meeting"
+      "workflow": "reschedule_meeting",
+      "endpoint": "http://localhost:8787/api/reschedule-meeting"
     },
     {
       "intent": "daily_digest",
-      "workflow": "daily_intent_digest"
+      "workflow": "daily_intent_digest",
+      "endpoint": "http://localhost:8787/api/daily-intent-digest"
     }
   ]
 } 

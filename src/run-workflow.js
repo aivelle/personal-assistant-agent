@@ -1,7 +1,6 @@
 import { workflows, runWorkflow } from "./workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
 import { getIntentFromPrompt } from "./utils/getIntentFromPrompt.js";
-import workflowRouter from "../configs/workflow-router.json" assert { type: 'json' };
 
 /**
  * Runs a workflow by intent or workflow name.
@@ -25,14 +24,13 @@ export async function runWorkflowByKey(key, context = {}) {
 }
 
 /**
- * Get endpoint from workflow-router using intent (route)
+ * Get endpoint from prompt-router using intent or workflow name
  * @param {string} route - The route name from intent-manager
  * @returns {string|null} - The endpoint string (full URL)
  */
 function getEndpointFromRoute(route) {
-  // workflowRouter can be an array or { routes: [...] }
-  const routes = Array.isArray(workflowRouter) ? workflowRouter : workflowRouter.routes;
-  const match = routes.find(item => item.workflow_id === route);
+  const routes = Array.isArray(promptRouter.routes) ? promptRouter.routes : promptRouter;
+  const match = routes.find(item => item.workflow === route || item.intent === route);
   return match ? match.endpoint : null;
 }
 
