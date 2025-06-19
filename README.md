@@ -7,7 +7,7 @@ This is a lightweight, intention-based AI assistant system designed to manage an
 - Context-aware scheduling and task suggestions based on user's Notion and Google Calendar data
 - Dynamic intent classification to determine next actions
 - Supports email-based requests, reminders, summaries, and more
-- Modular scenario-based workflow files with simplified routing logic
+- Modular workflow files with simplified routing logic
 - Easy to customize and extend with JSON-based configuration
 
 ## 📁 Project Structure
@@ -22,22 +22,13 @@ agent-simplified/
 │       ├── google.calendar.json
 │       ├── google.meet.json
 │       ├── google.gmail.json
-├── workflows/
-│   └── scenario/
-│       ├── create.json
-│       ├── insight.json
-│       ├── manage.json
-│       ├── remind.json
-│       ├── summarize.json
-│       ├── retrieve.json
-│       ├── suggest.json
-│       └── intention-classifier.json
 ├── src/
 │   ├── index.js
-│   ├── router.js
-│   ├── intent-parser.js
-│   ├── ai-agent.js
-│   └── utils.js
+│   ├── intent-manager.js
+│   ├── run-workflow.js
+│   ├── workflow-engine.js
+│   ├── workflows/
+│   └── utils/
 ├── system/
 │   └── system_prompt.json
 ├── public/
