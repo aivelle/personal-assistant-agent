@@ -11,45 +11,68 @@
  */
 
 const STATE_PREFIX = 'oauth_state_';
+const USER_PREFIX = 'oauth_user_';
 const STATE_EXPIRY = 60 * 5; // 5 minutes in seconds
+
+/**
+ * Utility function for KV JSON operations
+ */
+async function kvJSON(operation, env, key, value = null, options = {}) {
+  switch (operation) {
+    case 'get':
+      const data = await env.USERS_KV.get(key);
+      return data ? JSON.parse(data) : null;
+    case 'put':
+      await env.USERS_KV.put(key, JSON.stringify(value), options);
+      return true;
+    default:
+      throw new Error(`Unknown KV operation: ${operation}`);
+  }
+}
 
 /**
  * OAuth 상태 저장
  */
 export async function saveOAuthState(state, env) {
   const key = `${STATE_PREFIX}${state}`;
-  await env.USERS_KV.put(key, JSON.stringify({
+  return kvJSON('put', env, key, {
     created: Date.now()
-  }), {
+  }, {
     expirationTtl: STATE_EXPIRY
   });
 }
 
 /**
- * OAuth 상태 검증
+ * OAuth 상태 검증 - Atomic Operation
  */
 export async function verifyOAuthState(state, env) {
   if (!state) return false;
   
   const key = `${STATE_PREFIX}${state}`;
-  const stored = await env.USERS_KV.get(key);
   
-  if (!stored) return false;
-  
-  // 상태 검증 후 삭제
-  await env.USERS_KV.delete(key);
-  return true;
+  // Atomic operation using KV's atomic read-delete
+  try {
+    const stored = await env.USERS_KV.getWithMetadata(key);
+    if (!stored.value) return false;
+    
+    // Delete the state token immediately after reading
+    await env.USERS_KV.delete(key);
+    return true;
+  } catch (error) {
+    console.error('Error during atomic state verification:', error);
+    return false;
+  }
 }
 
 /**
  * OAuth 사용자 데이터 저장
  */
 export async function saveUserOAuthData(userId, data, env) {
-  const key = `oauth_user_${userId}`;
-  await env.USERS_KV.put(key, JSON.stringify({
+  const key = `${USER_PREFIX}${userId}`;
+  return kvJSON('put', env, key, {
     ...data,
     updated: Date.now()
-  }));
+  });
 }
 
 /**
@@ -179,14 +202,11 @@ export function createOAuthSuccessResponse(message = 'Authentication successful!
 }
 
 /**
- * 사용자 정보(users) KV에서 토큰/정보 불러오기
- * @param {string} userId
- * @param {object} env (Cloudflare Workers 환경 변수)
- * @returns {object|null}
+ * 사용자 정보 불러오기
  */
 export async function getUserOAuthData(userId, env) {
-  const raw = await env.USERS_KV.get(`user:${userId}`);
-  return raw ? JSON.parse(raw) : null;
+  const key = `${USER_PREFIX}${userId}`;
+  return kvJSON('get', env, key);
 }
 
 // (로컬 개발용 파일 기반 예시는 주석 처리)

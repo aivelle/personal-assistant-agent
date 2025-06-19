@@ -1,8 +1,38 @@
-# Cloudflare Wrangler 임시 파일
-.wrangler/tmp/
+# Dependencies
+node_modules/
 
-# macOS Finder metadata
-src/.DS_Store
+# Environment variables
+.env
+.env.local
+.env.*.local
 
-# Node.js dependencies
-src/node_modules/ 
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Wrangler temporary files
+.wrangler/tmp/ 
