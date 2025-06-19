@@ -1,5 +1,5 @@
 /**
- * @intent intgengtion_classifier
+ * @intent intention_classifier
  * @description Classify the integration type or intent from user input.
  * @example "Classify this as a Notion integration"
  */

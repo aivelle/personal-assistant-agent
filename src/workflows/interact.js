@@ -1,5 +1,5 @@
 /**
- * @intent ingeract
+ * @intent interact
  * @description Handle user interaction scenarios.
  * @example "Start a conversation with the assistant"
  */
