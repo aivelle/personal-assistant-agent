@@ -17,6 +17,9 @@ ENVIRONMENT = "production"
 # NOTION_CLIENT_ID = "your-notion-client-id" 
 # NOTION_CLIENT_SECRET = "your-notion-client-secret"
 
+[observability.logs]
+enabled = true
+
 [triggers]
 crons = []
 
