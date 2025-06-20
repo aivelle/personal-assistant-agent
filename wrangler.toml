@@ -1,7 +1,7 @@
 name = "personal-assistant-agent"
 account_id = "28a29a934ac59a2e7887972b9cb042e2"
 main = "src/index.js"
-workers_dev = false
+workers_dev = true
 compatibility_date = "2025-05-25"
 
 [[kv_namespaces]]
@@ -11,6 +11,11 @@ id = "09653d527f3a46688c1ed5cf2bca446c"
 
 [vars]
 ENVIRONMENT = "production"
+# OAuth credentials are set via Cloudflare dashboard for security
+# GOOGLE_CLIENT_ID = "your-google-client-id"
+# GOOGLE_CLIENT_SECRET = "your-google-client-secret"
+# NOTION_CLIENT_ID = "your-notion-client-id" 
+# NOTION_CLIENT_SECRET = "your-notion-client-secret"
 
 [triggers]
 crons = []

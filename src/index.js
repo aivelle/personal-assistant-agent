@@ -70,18 +70,198 @@ export default {
         return await handleGPTAction(request, env, pathname);
       }
 
+      // Authentication page
+      if (pathname === '/auth') {
+        console.log('Processing /auth route');
+        
+        // 환경 변수 검증
+        const missingEnvVars = [];
+        if (!env.GOOGLE_CLIENT_ID) missingEnvVars.push('GOOGLE_CLIENT_ID');
+        if (!env.GOOGLE_CLIENT_SECRET) missingEnvVars.push('GOOGLE_CLIENT_SECRET');
+        if (!env.NOTION_CLIENT_ID) missingEnvVars.push('NOTION_CLIENT_ID');
+        if (!env.NOTION_CLIENT_SECRET) missingEnvVars.push('NOTION_CLIENT_SECRET');
+        if (!env.USERS_KV) missingEnvVars.push('USERS_KV');
+
+        if (missingEnvVars.length > 0) {
+          console.error("Missing environment variables:", missingEnvVars);
+          return new Response(`Configuration Error: Missing ${missingEnvVars.join(', ')}`, {
+            status: 500,
+            headers: {
+              'Content-Type': 'text/plain',
+              ...responseHeaders
+            }
+          });
+        }
+
+        console.log('All environment variables are present, returning HTML');
+        const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIVELLE - Authentication</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .auth-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+            text-decoration: none;
+        }
+        .google {
+            background-color: #4285f4;
+            color: white;
+        }
+        .google:hover {
+            background-color: #3367d6;
+        }
+        .notion {
+            background-color: #000000;
+            color: white;
+        }
+        .notion:hover {
+            background-color: #2f2f2f;
+        }
+        .error {
+            color: #d32f2f;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            display: none;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .info h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .endpoint {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AIVELLE Authentication</h1>
+        <div id="error" class="error"></div>
+        
+        <div class="info">
+            <h3>🤖 GPT Actions Available</h3>
+            <p>After authentication, these endpoints will be available for ChatGPT:</p>
+            <div class="endpoint">GET /gpt/calendar/events</div>
+            <div class="endpoint">GET /gpt/calendar/free-time</div>
+            <div class="endpoint">POST /gpt/calendar/schedule</div>
+            <div class="endpoint">GET /gpt/schedule/analyze</div>
+        </div>
+        
+        <div class="auth-buttons">
+            <a href="/auth/google" class="auth-button google" onclick="return handleAuth(event)">
+                Sign in with Google
+            </a>
+            <a href="/auth/notion" class="auth-button notion" onclick="return handleAuth(event)">
+                Sign in with Notion
+            </a>
+        </div>
+    </div>
+    <script>
+    function handleAuth(event) {
+        try {
+            const button = event.currentTarget;
+            const provider = button.classList.contains('google') ? 'Google' : 'Notion';
+            const errorDiv = document.getElementById('error');
+            
+            // 기본 동작 허용
+            return true;
+        } catch (error) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = 'Authentication error occurred. Please try again.';
+            return false;
+        }
+    }
+    </script>
+</body>
+</html>`;
+
+          return new Response(html, {
+            headers: {
+              'Content-Type': 'text/html',
+              ...responseHeaders
+            }
+          });
+      }
+
       // OAuth routes
-      if (pathname === '/oauth/google') {
+      if (pathname === '/auth/google') {
         return await handleGoogleOAuthRequest(request, env, responseHeaders);
       } 
-      if (pathname === '/oauth/google/callback') {
+      if (pathname === '/auth/google/callback') {
         return await handleGoogleOAuthCallback(request, env, responseHeaders);
       }
-      if (pathname === '/oauth/notion') {
+      if (pathname === '/auth/notion') {
         return await handleNotionOAuthRequest(request, env, responseHeaders);
       }
-      if (pathname === '/oauth/notion/callback') {
+      if (pathname === '/auth/notion/callback') {
         return await handleNotionOAuthCallback(request, env, responseHeaders);
+      }
+
+      // Legacy OAuth routes (redirect to new paths)
+      if (pathname === '/oauth/google') {
+        return Response.redirect(new URL('/auth/google', request.url).href, 301);
+      }
+      if (pathname === '/oauth/google/callback') {
+        return Response.redirect(new URL('/auth/google/callback', request.url).href, 301);
+      }
+      if (pathname === '/oauth/notion') {
+        return Response.redirect(new URL('/auth/notion', request.url).href, 301);
+      }
+      if (pathname === '/oauth/notion/callback') {
+        return Response.redirect(new URL('/auth/notion/callback', request.url).href, 301);
       }
 
       // API routes
