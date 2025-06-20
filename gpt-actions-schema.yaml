@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: AIVELLE Personal Assistant API
+  description: AI-powered personal assistant that connects to your Google Calendar
+  version: 1.0.0
+servers:
+  - url: https://personal-assistant-agent.itstylebox999.workers.dev
+    description: AIVELLE Production Server
+
+paths:
+  /gpt/calendar/events:
+    get:
+      operationId: getCalendarEvents
+      summary: Get user's calendar events
+      description: Retrieve calendar events from the user's Google Calendar
+      parameters:
+        - name: days
+          in: query
+          description: Number of days to look ahead (default 7)
+          required: false
+          schema:
+            type: integer
+            default: 7
+            minimum: 1
+            maximum: 30
+      responses:
+        '200':
+          description: Calendar events retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: string
+                  timeframe:
+                    type: string
+                  summary:
+                    type: object
+                    properties:
+                      totalEvents:
+                        type: integer
+                      upcomingEvents:
+                        type: integer
+                      todayEvents:
+                        type: integer
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        start:
+                          type: string
+                          format: date-time
+                        end:
+                          type: string
+                          format: date-time
+                        calendar:
+                          type: string
+
+  /gpt/calendar/free-time:
+    get:
+      operationId: findFreeTime
+      summary: Find free time slots
+      description: Find available time slots in the user's calendar
+      parameters:
+        - name: duration
+          in: query
+          description: Minimum duration in minutes (default 60)
+          required: false
+          schema:
+            type: integer
+            default: 60
+            minimum: 15
+            maximum: 480
+        - name: days
+          in: query
+          description: Number of days to look ahead (default 7)
+          required: false
+          schema:
+            type: integer
+            default: 7
+            minimum: 1
+            maximum: 14
+      responses:
+        '200':
+          description: Free time slots found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: string
+                  requested_duration:
+                    type: string
+                  timeframe:
+                    type: string
+                  free_slots:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        start:
+                          type: string
+                          format: date-time
+                        end:
+                          type: string
+                          format: date-time
+                        duration_minutes:
+                          type: integer
+
+  /gpt/calendar/schedule:
+    post:
+      operationId: scheduleEvent
+      summary: Schedule a new calendar event
+      description: Create a new event in the user's Google Calendar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - start
+                - end
+              properties:
+                title:
+                  type: string
+                  description: Event title
+                description:
+                  type: string
+                  description: Event description
+                start:
+                  type: string
+                  format: date-time
+                  description: Event start time (ISO 8601)
+                end:
+                  type: string
+                  format: date-time
+                  description: Event end time (ISO 8601)
+                timeZone:
+                  type: string
+                  description: Time zone (default America/New_York)
+                  default: America/New_York
+                attendees:
+                  type: array
+                  items:
+                    type: string
+                  description: List of attendee email addresses
+      responses:
+        '200':
+          description: Event scheduled successfully
+
+  /gpt/schedule/analyze:
+    get:
+      operationId: analyzeSchedule
+      summary: Analyze schedule patterns
+      description: Analyze the user's schedule patterns and provide insights
+      responses:
+        '200':
+          description: Schedule analysis completed
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Session token obtained after OAuth authentication
+
+security:
+  - BearerAuth: [] 

@@ -6,7 +6,10 @@ import { runWorkflowFromPrompt } from "./run-workflow.js";
 import { getIntentFromPrompt } from "./utils/getIntentFromPrompt.js";
 import { handleGoogleOAuthRequest, handleGoogleOAuthCallback } from './oauth/google.js';
 import { handleNotionOAuthRequest, handleNotionOAuthCallback } from './oauth/notion.js';
-import logger from './utils/logger.js';
+import { handleGPTAction } from './gpt-actions/endpoints.js';
+import { SessionManager } from './utils/session.js';
+import { GoogleClient } from './integrations/google.js';
+// import logger from './utils/console.js';
 
 export default {
   async fetch(request, env) {
@@ -27,10 +30,7 @@ export default {
 
     // 무한 루프 감지 및 차단
     if (referer.includes("aivelle.com") || userAgent.includes("Aivelle-Agent")) {
-      logger.warn("Loop detected and blocked", {
-        ...meta,
-        reason: "loop_detected"
-      });
+      console.warn("Loop detected and blocked", meta);
       return new Response("Loop detected and blocked", { 
         status: 429,
         headers: {
@@ -43,11 +43,7 @@ export default {
     // ✅ V: Validate → 요청 깊이, 반복 여부 검사
     const depth = Number(headers.get("X-Depth") || "0");
     if (depth > 3) {
-      logger.warn("Request depth limit exceeded", {
-        ...meta,
-        depth,
-        reason: "depth_exceeded"
-      });
+      console.warn("Request depth limit exceeded", { ...meta, depth });
       return new Response("Request depth limit exceeded", { 
         status: 400,
         headers: { "X-Error-Type": "depth_exceeded" }
@@ -55,7 +51,7 @@ export default {
     }
 
     // ✅ L: Log & Launch → 요청 기록
-    logger.apiRequest(request.method, new URL(request.url).pathname, meta);
+    console.log("API Request:", request.method, new URL(request.url).pathname, meta);
 
     // Add tracking headers for subsequent requests
     const responseHeaders = {
@@ -68,6 +64,12 @@ export default {
     const pathname = url.pathname;
 
     try {
+      // GPT Actions routes - PRIORITY ROUTING
+      if (pathname.startsWith('/gpt/')) {
+        console.log('Processing GPT Action:', pathname);
+        return await handleGPTAction(request, env, pathname);
+      }
+
       // OAuth routes
       if (pathname === '/oauth/google') {
         return await handleGoogleOAuthRequest(request, env, responseHeaders);
@@ -89,7 +91,7 @@ export default {
           const intent = body.intent;
           const route = promptRouter.routes.find(r => r.intent === intent);
           if (!route) {
-            logger.warn("No workflow mapped for intent", {
+            console.warn("No workflow mapped for intent", {
               ...meta,
               intent,
               reason: "workflow_not_found"
@@ -101,7 +103,7 @@ export default {
           }
           const workflow = workflows[route.workflow];
           if (!workflow) {
-            logger.warn("Workflow not found", {
+            console.warn("Workflow not found", {
               ...meta,
               workflow: route.workflow,
               reason: "workflow_not_found"
@@ -118,7 +120,7 @@ export default {
           await runWorkflow(workflow, workflow.trigger, context);
           const endTime = performance.now();
           
-          logger.logMetric("workflow_execution_time", endTime - startTime, {
+          console.logMetric("workflow_execution_time", endTime - startTime, {
             ...meta,
             workflow: route.workflow
           });
@@ -128,7 +130,7 @@ export default {
             headers: responseHeaders
           });
         } catch (err) {
-          logger.error("Workflow execution error", {
+          console.error("Workflow execution error", {
             ...meta,
             error: err.message,
             stack: err.stack
@@ -148,7 +150,7 @@ export default {
           const intent = getIntentFromPrompt(prompt);
 
           if (!intent) {
-            logger.warn("No matching intent found", {
+            console.warn("No matching intent found", {
               ...meta,
               prompt,
               reason: "intent_not_found"
@@ -163,7 +165,7 @@ export default {
           const result = await runWorkflow(intent, prompt);
           const endTime = performance.now();
 
-          logger.logMetric("intent_execution_time", endTime - startTime, {
+          console.logMetric("intent_execution_time", endTime - startTime, {
             ...meta,
             intent
           });
@@ -176,7 +178,7 @@ export default {
             }
           });
         } catch (err) {
-          logger.error("Root path execution error", {
+          console.error("Root path execution error", {
             ...meta,
             error: err.message,
             stack: err.stack
@@ -189,7 +191,7 @@ export default {
       }
 
       // Default response for unmatched routes
-      logger.warn("Route not found", {
+      console.warn("Route not found", {
         ...meta,
         path: pathname,
         reason: "route_not_found"
@@ -199,7 +201,7 @@ export default {
         headers: responseHeaders
       });
     } catch (err) {
-      logger.fatal("Unhandled error", {
+      console.fatal("Unhandled error", {
         ...meta,
         error: err.message,
         stack: err.stack
@@ -216,7 +218,7 @@ export default {
 addEventListener('fetch', event => {
   event.respondWith(
     handleRequest(event.request, event.env).catch(err => {
-      logger.fatal("Unhandled request error", {
+      console.fatal("Unhandled request error", {
         error: err.message,
         stack: err.stack
       });
