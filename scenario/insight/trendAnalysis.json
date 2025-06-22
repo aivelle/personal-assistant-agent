@@ -1,0 +1,56 @@
+{
+  "name": "trendAnalysis",
+  "intent": "insight.trendAnalysis",
+  "title": "트렌드 분석",
+  "description": "데이터 패턴을 분석하여 트렌드와 인사이트를 도출하는 시나리오",
+  "category": "insight",
+  "priority": 130,
+  "enabled": true,
+  "triggers": [
+    "트렌드를 분석해줘",
+    "패턴을 찾아줘",
+    "인사이트를 알려줘",
+    "변화를 분석해줘",
+    "경향을 파악해줘"
+  ],
+  "examples": [
+    "지난 분기 업무 패턴을 분석해줘",
+    "프로젝트 완료 시간의 트렌드를 알려줘",
+    "팀 생산성 변화를 분석해줘",
+    "월별 작업량 패턴을 파악해줘"
+  ],
+  "parameters": [
+    {
+      "name": "data_source",
+      "type": "string",
+      "description": "분석할 데이터 소스",
+      "required": true
+    },
+    {
+      "name": "time_period",
+      "type": "object",
+      "description": "분석 기간",
+      "required": false
+    },
+    {
+      "name": "metrics",
+      "type": "array",
+      "description": "분석할 지표들",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "insight/trendAnalysis"
+  ],
+  "outputs": {
+    "trends": "발견된 트렌드",
+    "insights": "핵심 인사이트",
+    "recommendations": "개선 권장사항"
+  },
+  "tags": [
+    "analysis",
+    "trends",
+    "insights",
+    "patterns"
+  ]
+}

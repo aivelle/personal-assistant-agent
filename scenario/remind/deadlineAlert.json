@@ -1,0 +1,56 @@
+{
+  "name": "deadlineAlert",
+  "intent": "remind.deadlineAlert",
+  "title": "데드라인 알림",
+  "description": "중요한 마감일을 추적하고 적절한 시점에 알림을 제공하는 시나리오",
+  "category": "remind",
+  "priority": 180,
+  "enabled": true,
+  "triggers": [
+    "데드라인을 알려줘",
+    "마감일이 언제야",
+    "언제까지 해야 해",
+    "마감일 알림을 설정해줘",
+    "데드라인을 확인해줘"
+  ],
+  "examples": [
+    "이번 주 마감인 작업들을 알려줘",
+    "프로젝트 데드라인까지 며칠 남았는지 확인해줘",
+    "내일까지 해야 할 일들을 알림으로 설정해줘",
+    "마감일이 다가오는 작업들을 정리해줘"
+  ],
+  "parameters": [
+    {
+      "name": "time_range",
+      "type": "string",
+      "description": "확인할 시간 범위 (today, this_week, this_month)",
+      "required": false
+    },
+    {
+      "name": "priority_level",
+      "type": "string",
+      "description": "우선순위 레벨 (high, medium, low)",
+      "required": false
+    },
+    {
+      "name": "advance_notice",
+      "type": "number",
+      "description": "사전 알림 시간(시간 단위)",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "remind/deadlineAlert"
+  ],
+  "outputs": {
+    "upcoming_deadlines": "다가오는 마감일 목록",
+    "urgent_tasks": "긴급 작업 목록",
+    "reminder_schedule": "알림 일정"
+  },
+  "tags": [
+    "deadline",
+    "reminder",
+    "time-management",
+    "alert"
+  ]
+}

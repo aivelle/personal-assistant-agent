@@ -1,0 +1,56 @@
+{
+  "name": "rescheduleOption",
+  "intent": "suggest.rescheduleOption",
+  "title": "대안 일정 제안",
+  "description": "기존 일정을 조정하여 최적의 대안 스케줄을 제안하는 시나리오",
+  "category": "suggest",
+  "priority": 140,
+  "enabled": true,
+  "triggers": [
+    "일정을 바꿔줘",
+    "다른 시간으로 옮겨줘",
+    "리스케줄해줘",
+    "일정 조정이 필요해",
+    "시간을 변경하고 싶어"
+  ],
+  "examples": [
+    "내일 회의를 다른 시간으로 옮길 수 있을까?",
+    "이번 주 일정을 전체적으로 재조정해줘",
+    "더 효율적인 스케줄로 바꿔줘",
+    "시간 여유가 있는 날로 일정을 옮겨줘"
+  ],
+  "parameters": [
+    {
+      "name": "target_event",
+      "type": "object",
+      "description": "변경하려는 일정 정보",
+      "required": true
+    },
+    {
+      "name": "preferred_times",
+      "type": "array",
+      "description": "선호하는 시간대",
+      "required": false
+    },
+    {
+      "name": "constraints",
+      "type": "object",
+      "description": "일정 제약사항",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "suggest/rescheduleOption"
+  ],
+  "outputs": {
+    "alternatives": "대안 일정 옵션들",
+    "recommendations": "추천 스케줄",
+    "conflicts": "충돌 가능한 일정들"
+  },
+  "tags": [
+    "reschedule",
+    "calendar",
+    "time-management",
+    "optimization"
+  ]
+}

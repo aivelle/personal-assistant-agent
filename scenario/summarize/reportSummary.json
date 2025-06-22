@@ -1,0 +1,56 @@
+{
+  "name": "reportSummary",
+  "intent": "summarize.reportSummary",
+  "title": "보고서 요약",
+  "description": "긴 문서나 보고서의 핵심 내용을 요약하는 시나리오",
+  "category": "summarize",
+  "priority": 140,
+  "enabled": true,
+  "triggers": [
+    "요약해줘",
+    "정리해줘",
+    "핵심만 알려줘",
+    "간단히 설명해줘",
+    "요점을 정리해줘"
+  ],
+  "examples": [
+    "이 보고서의 핵심 내용을 요약해줘",
+    "회의록을 간단히 정리해줘",
+    "프로젝트 진행 상황을 요약해줘",
+    "이 문서의 주요 포인트를 알려줘"
+  ],
+  "parameters": [
+    {
+      "name": "content",
+      "type": "string",
+      "description": "요약할 내용",
+      "required": true
+    },
+    {
+      "name": "summary_length",
+      "type": "string",
+      "description": "요약 길이 (short, medium, detailed)",
+      "required": false
+    },
+    {
+      "name": "focus_areas",
+      "type": "array",
+      "description": "중점적으로 다룰 영역",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "summarize/reportSummary"
+  ],
+  "outputs": {
+    "summary": "요약 내용",
+    "key_points": "핵심 포인트",
+    "action_items": "액션 아이템"
+  },
+  "tags": [
+    "summary",
+    "report",
+    "analysis",
+    "documentation"
+  ]
+}

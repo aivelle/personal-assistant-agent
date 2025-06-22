@@ -1,20 +1,34 @@
 {
-  "name": "personal-assistant-agent",
+  "name": "aivelle-personal-assistant",
   "version": "1.0.0",
-  "description": "A simplified personal assistant agent powered by Cloudflare Workers and Custom GPT.",
+  "description": "AIVELLE - AI-powered personal assistant agent with scenario-based workflow automation",
   "main": "src/index.js",
   "scripts": {
     "start": "wrangler dev",
-    "deploy": "wrangler publish"
+    "deploy": "wrangler publish",
+    "dev": "wrangler dev --local",
+    "check-scenarios": "node scripts/check-scenario-links.js",
+    "generate-docs": "node scripts/extract-intent-docs.js",
+    "validate-config": "node scripts/validate-config-schema.js",
+    "detect-conflicts": "node scripts/detect-conflicts.js",
+    "test-workflows": "node scripts/list-unused-workflows.js"
   },
-  "author": "AIVELLE",
+  "keywords": ["ai", "assistant", "automation", "cloudflare-workers", "notion", "google-calendar"],
+  "author": "AIVELLE Team",
   "license": "MIT",
   "dependencies": {
     "itty-router": "^3.0.8",
-    "openai": "^4.26.0",
-    "dotenv": "^16.3.1"
+    "openai": "^4.26.0"
   },
   "devDependencies": {
-    "wrangler": "^3.45.0"
+    "wrangler": "^3.45.0",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aivelle/personal-assistant-agent"
   }
 }

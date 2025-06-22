@@ -1,0 +1,56 @@
+{
+  "name": "followUp",
+  "intent": "remind.followUp",
+  "title": "후속 조치 알림",
+  "description": "대기 중인 응답이나 후속 조치가 필요한 항목들을 추적하고 알림하는 시나리오",
+  "category": "remind",
+  "priority": 130,
+  "enabled": true,
+  "triggers": [
+    "후속 조치를 확인해줘",
+    "답변을 기다리고 있어",
+    "팔로업이 필요해",
+    "응답을 받았는지 확인해줘",
+    "대기 중인 일들을 알려줘"
+  ],
+  "examples": [
+    "클라이언트에게 보낸 이메일 답변을 받았는지 확인해줘",
+    "지난주에 요청한 자료가 도착했는지 알려줘",
+    "회의 후 액션 아이템들의 진행 상황을 체크해줘",
+    "승인 대기 중인 문서들을 정리해줘"
+  ],
+  "parameters": [
+    {
+      "name": "pending_items",
+      "type": "array",
+      "description": "대기 중인 항목들",
+      "required": false
+    },
+    {
+      "name": "follow_up_date",
+      "type": "date",
+      "description": "후속 조치 예정일",
+      "required": false
+    },
+    {
+      "name": "contact_person",
+      "type": "string",
+      "description": "연락 대상자",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "remind/followUp"
+  ],
+  "outputs": {
+    "pending_list": "대기 항목 목록",
+    "overdue_items": "지연된 항목들",
+    "next_actions": "다음 조치 사항"
+  },
+  "tags": [
+    "follow-up",
+    "tracking",
+    "communication",
+    "pending"
+  ]
+}

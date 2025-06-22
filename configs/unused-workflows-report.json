@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-06-22T00:27:45.526Z",
+  "summary": {
+    "totalWorkflows": 0,
+    "usedWorkflows": 0,
+    "unusedWorkflows": 0,
+    "orphanedScenarios": 0
+  },
+  "unusedWorkflows": [],
+  "orphanedScenarios": [],
+  "recommendations": []
+}

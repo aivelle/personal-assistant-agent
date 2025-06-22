@@ -1,0 +1,56 @@
+{
+  "name": "prioritySort",
+  "intent": "manage.prioritySort",
+  "title": "우선순위 정렬 관리",
+  "description": "작업들의 우선순위를 분석하고 정렬하여 관리하는 시나리오",
+  "category": "manage",
+  "priority": 170,
+  "enabled": true,
+  "triggers": [
+    "우선순위를 정해줘",
+    "어떤 일부터 해야 할까",
+    "중요한 순서대로 정렬해줘",
+    "우선순위를 바꿔줘",
+    "급한 일이 뭐야"
+  ],
+  "examples": [
+    "오늘 할 일들의 우선순위를 정해줘",
+    "프로젝트 작업들을 중요도 순으로 정렬해줘",
+    "데드라인을 고려해서 우선순위를 바꿔줘",
+    "어떤 작업이 가장 급한지 알려줘"
+  ],
+  "parameters": [
+    {
+      "name": "tasks",
+      "type": "array",
+      "description": "정렬할 작업 목록",
+      "required": true
+    },
+    {
+      "name": "criteria",
+      "type": "array",
+      "description": "우선순위 기준 (deadline, importance, effort)",
+      "required": false
+    },
+    {
+      "name": "constraints",
+      "type": "object",
+      "description": "제약 조건",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "manage/prioritySort"
+  ],
+  "outputs": {
+    "sorted_tasks": "우선순위별 정렬된 작업 목록",
+    "reasoning": "우선순위 결정 근거",
+    "recommendations": "관리 권장사항"
+  },
+  "tags": [
+    "priority",
+    "task-management",
+    "organization",
+    "planning"
+  ]
+}

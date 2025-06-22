@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "description": "Schedule a new meeting and add it to the calendar.",
+    "intention": "create",
+    "required_roles": [
+      "title",
+      "scheduled_time"
+    ],
+    "optional_roles": [
+      "platform",
+      "attendees"
+    ]
+  },
+  "steps": [
+    {
+      "type": "ask",
+      "role": "title",
+      "prompt": "What is the title of the meeting?"
+    },
+    {
+      "type": "ask",
+      "role": "scheduled_time",
+      "prompt": "When is the meeting scheduled?"
+    },
+    {
+      "type": "ask_if_available",
+      "role": "platform",
+      "prompt": "Which platform will the meeting be on?"
+    },
+    {
+      "type": "ask_if_available",
+      "role": "attendees",
+      "prompt": "Who will attend the meeting?"
+    },
+    {
+      "type": "confirm",
+      "summary": true
+    },
+    {
+      "type": "save_to",
+      "destination": "google.calendar"
+    }
+  ],
+  "intent": "create.meeting"
+}

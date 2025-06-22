@@ -1,27 +1,3 @@
 {
-  "_meta": {
-    "description": "Prompt routing configuration for AI agent. Map user prompt types or intents to specific workflows or response strategies."
-  },
-  "routes": [
-    {
-      "intent": "voice_to_anywhere",
-      "workflow": "voice_to_anywhere"
-    },
-    {
-      "intent": "attach_image",
-      "workflow": "attach_image_to_any_post"
-    },
-    {
-      "intent": "repurpose_content",
-      "workflow": "content_repurpose"
-    },
-    {
-      "intent": "reschedule_meeting",
-      "workflow": "reschedule_meeting"
-    },
-    {
-      "intent": "daily_digest",
-      "workflow": "daily_intent_digest"
-    }
-  ]
-} 
+  "routes": []
+}

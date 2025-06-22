@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "description": "Create a time-based reminder for the user.",
+    "intention": "create",
+    "required_roles": [
+      "title",
+      "due_date"
+    ],
+    "optional_roles": [
+      "platform"
+    ]
+  },
+  "steps": [
+    {
+      "type": "ask",
+      "role": "title",
+      "prompt": "What would you like to be reminded about?"
+    },
+    {
+      "type": "ask_if_missing",
+      "role": "due_date",
+      "prompt": "When should I remind you?"
+    },
+    {
+      "type": "ask_if_available",
+      "role": "platform",
+      "prompt": "Should this reminder be linked to a platform?"
+    },
+    {
+      "type": "confirm",
+      "summary": true
+    },
+    {
+      "type": "save_to",
+      "destination": "notion.reminders"
+    }
+  ],
+  "intent": "create.reminder"
+}

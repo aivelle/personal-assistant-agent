@@ -1,0 +1,56 @@
+{
+  "name": "delayAnalysis",
+  "intent": "suggest.delayAnalysis",
+  "title": "일정 지연 원인 분석 및 제안",
+  "description": "일이 밀렸을 때 원인을 분석하고 해결책을 제안하는 시나리오",
+  "category": "suggest",
+  "priority": 150,
+  "enabled": true,
+  "triggers": [
+    "일이 밀렸어",
+    "일정이 늦어지고 있어",
+    "데드라인을 못 맞출 것 같아",
+    "진행이 느려",
+    "뒤처지고 있어"
+  ],
+  "examples": [
+    "일이 너무 밀려서 어떻게 해야 할지 모르겠어",
+    "프로젝트 일정이 계속 늦어지는데 원인을 찾고 싶어",
+    "데드라인까지 시간이 부족한데 어떻게 해결하지?",
+    "왜 자꾸 일정이 지연되는지 분석해줘"
+  ],
+  "parameters": [
+    {
+      "name": "current_tasks",
+      "type": "array",
+      "description": "현재 진행 중인 작업 목록",
+      "required": false
+    },
+    {
+      "name": "deadline",
+      "type": "date",
+      "description": "목표 완료 일정",
+      "required": false
+    },
+    {
+      "name": "delay_reasons",
+      "type": "array",
+      "description": "지연 원인들",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "suggest/delayAnalysis"
+  ],
+  "outputs": {
+    "analysis": "지연 원인 분석 결과",
+    "suggestions": "개선 제안사항",
+    "priority_tasks": "우선순위 작업 목록"
+  },
+  "tags": [
+    "delay",
+    "analysis",
+    "productivity",
+    "time-management"
+  ]
+}

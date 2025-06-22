@@ -1,8 +1,8 @@
 // src/index.js
 
-import { workflows, runWorkflow } from "./workflow-engine.js";
+import { workflows, runWorkflow } from "./core/workflow-engine.js";
 import promptRouter from "../configs/prompt-router.json" assert { type: 'json' };
-import { runWorkflowFromPrompt } from "./run-workflow.js";
+import { runWorkflowFromPrompt } from "./core/run-workflow.js";
 import { getIntentFromPrompt } from "./utils/getIntentFromPrompt.js";
 import { handleGoogleOAuthRequest, handleGoogleOAuthCallback } from './oauth/google.js';
 import { handleNotionOAuthRequest, handleNotionOAuthCallback } from './oauth/notion.js';

@@ -1,0 +1,56 @@
+{
+  "name": "chatResponse",
+  "intent": "interact.chatResponse",
+  "title": "대화형 응답",
+  "description": "사용자와의 자연스러운 대화를 통해 정보를 제공하고 상호작용하는 시나리오",
+  "category": "interact",
+  "priority": 110,
+  "enabled": true,
+  "triggers": [
+    "대화하자",
+    "물어볼게 있어",
+    "상담해줘",
+    "이야기하자",
+    "조언해줘"
+  ],
+  "examples": [
+    "오늘 업무에 대해 상담하고 싶어",
+    "프로젝트 진행 방향에 대해 조언해줘",
+    "일정 관리에 대해 이야기하자",
+    "업무 효율성에 대해 물어볼게 있어"
+  ],
+  "parameters": [
+    {
+      "name": "conversation_topic",
+      "type": "string",
+      "description": "대화 주제",
+      "required": false
+    },
+    {
+      "name": "user_context",
+      "type": "object",
+      "description": "사용자 상황 정보",
+      "required": false
+    },
+    {
+      "name": "response_style",
+      "type": "string",
+      "description": "응답 스타일 (formal, casual, advisory)",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "interact/chatResponse"
+  ],
+  "outputs": {
+    "response": "대화 응답",
+    "follow_up_questions": "후속 질문",
+    "suggestions": "제안사항"
+  },
+  "tags": [
+    "conversation",
+    "interaction",
+    "chat",
+    "advisory"
+  ]
+}

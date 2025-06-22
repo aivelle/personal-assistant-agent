@@ -1,0 +1,407 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "generated": "2025-06-22T00:42:24.797Z",
+    "description": "Auto-generated routing rules from scenario definitions",
+    "total_scenarios": 16,
+    "categories": [
+      "create",
+      "insight",
+      "interact",
+      "manage",
+      "remind",
+      "retrieve",
+      "suggest",
+      "summarize"
+    ]
+  },
+  "routing": {
+    "default_priority": 100,
+    "fallback_intent": "interact.chatResponse",
+    "rules": {
+      "create.contentDraft": {
+        "intent": "create.contentDraft",
+        "category": "create",
+        "name": "contentDraft",
+        "title": "콘텐츠 초안 작성",
+        "description": "이메일, 문서, 보고서 등 다양한 콘텐츠의 초안을 작성하는 시나리오",
+        "priority": 150,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/create/contentDraft.json",
+          "code": "src/workflows/create/contentDraft.js"
+        },
+        "triggers": [
+          "이메일을 써줘",
+          "문서를 작성해줘",
+          "보고서 초안을 만들어줘",
+          "제안서를 써줘",
+          "콘텐츠를 만들어줘"
+        ],
+        "examples": [
+          "클라이언트에게 보낼 프로젝트 진행 상황 이메일을 써줘",
+          "월간 업무 보고서 초안을 작성해줘",
+          "새로운 서비스 제안서를 만들어줘",
+          "팀 회의 안건을 정리해줘"
+        ]
+      },
+      "create.meeting": {
+        "intent": "create.meeting",
+        "category": "create",
+        "name": "meeting",
+        "title": "meeting",
+        "description": "",
+        "priority": 100,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/create/create.meeting.json",
+          "code": "src/workflows/create/meeting.js"
+        },
+        "triggers": [],
+        "examples": []
+      },
+      "create.reminder": {
+        "intent": "create.reminder",
+        "category": "create",
+        "name": "reminder",
+        "title": "reminder",
+        "description": "",
+        "priority": 100,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/create/create.reminder.json",
+          "code": "src/workflows/create/reminder.js"
+        },
+        "triggers": [],
+        "examples": []
+      },
+      "create.task": {
+        "intent": "create.task",
+        "category": "create",
+        "name": "task",
+        "title": "task",
+        "description": "",
+        "priority": 100,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/create/create.task.json",
+          "code": "src/workflows/create/task.js"
+        },
+        "triggers": [],
+        "examples": []
+      },
+      "create.taskPlan": {
+        "intent": "create.taskPlan",
+        "category": "create",
+        "name": "taskPlan",
+        "title": "작업 계획 생성",
+        "description": "새로운 작업이나 프로젝트의 계획을 체계적으로 생성하는 시나리오",
+        "priority": 160,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/create/taskPlan.json",
+          "code": "src/workflows/create/taskPlan.js"
+        },
+        "triggers": [
+          "새 프로젝트를 시작해야 해",
+          "작업 계획을 세워줘",
+          "할 일 목록을 만들어줘",
+          "프로젝트 계획이 필요해",
+          "업무 계획을 짜줘"
+        ],
+        "examples": [
+          "웹사이트 리뉴얼 프로젝트 계획을 세워줘",
+          "이번 달 마케팅 캠페인 할 일 목록을 만들어줘",
+          "새로운 기능 개발을 위한 작업 계획이 필요해",
+          "팀 프로젝트 일정을 체계적으로 정리해줘"
+        ]
+      },
+      "insight.trendAnalysis": {
+        "intent": "insight.trendAnalysis",
+        "category": "insight",
+        "name": "trendAnalysis",
+        "title": "트렌드 분석",
+        "description": "데이터 패턴을 분석하여 트렌드와 인사이트를 도출하는 시나리오",
+        "priority": 130,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/insight/trendAnalysis.json",
+          "code": "src/workflows/insight/trendAnalysis.js"
+        },
+        "triggers": [
+          "트렌드를 분석해줘",
+          "패턴을 찾아줘",
+          "인사이트를 알려줘",
+          "변화를 분석해줘",
+          "경향을 파악해줘"
+        ],
+        "examples": [
+          "지난 분기 업무 패턴을 분석해줘",
+          "프로젝트 완료 시간의 트렌드를 알려줘",
+          "팀 생산성 변화를 분석해줘",
+          "월별 작업량 패턴을 파악해줘"
+        ]
+      },
+      "interact.chatResponse": {
+        "intent": "interact.chatResponse",
+        "category": "interact",
+        "name": "chatResponse",
+        "title": "대화형 응답",
+        "description": "사용자와의 자연스러운 대화를 통해 정보를 제공하고 상호작용하는 시나리오",
+        "priority": 110,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/interact/chatResponse.json",
+          "code": "src/workflows/interact/chatResponse.js"
+        },
+        "triggers": [
+          "대화하자",
+          "물어볼게 있어",
+          "상담해줘",
+          "이야기하자",
+          "조언해줘"
+        ],
+        "examples": [
+          "오늘 업무에 대해 상담하고 싶어",
+          "프로젝트 진행 방향에 대해 조언해줘",
+          "일정 관리에 대해 이야기하자",
+          "업무 효율성에 대해 물어볼게 있어"
+        ]
+      },
+      "manage.prioritySort": {
+        "intent": "manage.prioritySort",
+        "category": "manage",
+        "name": "prioritySort",
+        "title": "우선순위 정렬 관리",
+        "description": "작업들의 우선순위를 분석하고 정렬하여 관리하는 시나리오",
+        "priority": 170,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/manage/prioritySort.json",
+          "code": "src/workflows/manage/prioritySort.js"
+        },
+        "triggers": [
+          "우선순위를 정해줘",
+          "어떤 일부터 해야 할까",
+          "중요한 순서대로 정렬해줘",
+          "우선순위를 바꿔줘",
+          "급한 일이 뭐야"
+        ],
+        "examples": [
+          "오늘 할 일들의 우선순위를 정해줘",
+          "프로젝트 작업들을 중요도 순으로 정렬해줘",
+          "데드라인을 고려해서 우선순위를 바꿔줘",
+          "어떤 작업이 가장 급한지 알려줘"
+        ]
+      },
+      "manage.statusUpdate": {
+        "intent": "manage.statusUpdate",
+        "category": "manage",
+        "name": "statusUpdate",
+        "title": "상태 업데이트 관리",
+        "description": "프로젝트나 작업의 진행 상태를 업데이트하고 관리하는 시나리오",
+        "priority": 140,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/manage/statusUpdate.json",
+          "code": "src/workflows/manage/statusUpdate.js"
+        },
+        "triggers": [
+          "상태를 업데이트해줘",
+          "진행 상황을 기록해줘",
+          "완료 처리해줘",
+          "상태를 바꿔줘",
+          "진척도를 업데이트해줘"
+        ],
+        "examples": [
+          "프로젝트 A를 완료 상태로 바꿔줘",
+          "오늘 한 일들의 진행 상황을 업데이트해줘",
+          "작업 상태를 '진행 중'으로 변경해줘",
+          "전체 프로젝트의 진척도를 확인하고 업데이트해줘"
+        ]
+      },
+      "remind.deadlineAlert": {
+        "intent": "remind.deadlineAlert",
+        "category": "remind",
+        "name": "deadlineAlert",
+        "title": "데드라인 알림",
+        "description": "중요한 마감일을 추적하고 적절한 시점에 알림을 제공하는 시나리오",
+        "priority": 180,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/remind/deadlineAlert.json",
+          "code": "src/workflows/remind/deadlineAlert.js"
+        },
+        "triggers": [
+          "데드라인을 알려줘",
+          "마감일이 언제야",
+          "언제까지 해야 해",
+          "마감일 알림을 설정해줘",
+          "데드라인을 확인해줘"
+        ],
+        "examples": [
+          "이번 주 마감인 작업들을 알려줘",
+          "프로젝트 데드라인까지 며칠 남았는지 확인해줘",
+          "내일까지 해야 할 일들을 알림으로 설정해줘",
+          "마감일이 다가오는 작업들을 정리해줘"
+        ]
+      },
+      "remind.followUp": {
+        "intent": "remind.followUp",
+        "category": "remind",
+        "name": "followUp",
+        "title": "후속 조치 알림",
+        "description": "대기 중인 응답이나 후속 조치가 필요한 항목들을 추적하고 알림하는 시나리오",
+        "priority": 130,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/remind/followUp.json",
+          "code": "src/workflows/remind/followUp.js"
+        },
+        "triggers": [
+          "후속 조치를 확인해줘",
+          "답변을 기다리고 있어",
+          "팔로업이 필요해",
+          "응답을 받았는지 확인해줘",
+          "대기 중인 일들을 알려줘"
+        ],
+        "examples": [
+          "클라이언트에게 보낸 이메일 답변을 받았는지 확인해줘",
+          "지난주에 요청한 자료가 도착했는지 알려줘",
+          "회의 후 액션 아이템들의 진행 상황을 체크해줘",
+          "승인 대기 중인 문서들을 정리해줘"
+        ]
+      },
+      "retrieve.dataSearch": {
+        "intent": "retrieve.dataSearch",
+        "category": "retrieve",
+        "name": "dataSearch",
+        "title": "데이터 검색",
+        "description": "저장된 정보에서 필요한 데이터를 검색하고 추출하는 시나리오",
+        "priority": 160,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/retrieve/dataSearch.json",
+          "code": "src/workflows/retrieve/dataSearch.js"
+        },
+        "triggers": [
+          "찾아줘",
+          "검색해줘",
+          "어디에 있어",
+          "정보를 가져와줘",
+          "데이터를 찾아줘"
+        ],
+        "examples": [
+          "지난달 회의록을 찾아줘",
+          "프로젝트 A 관련 문서들을 검색해줘",
+          "클라이언트 연락처 정보를 가져와줘",
+          "예산 관련 자료를 찾아줘"
+        ]
+      },
+      "suggest.delayAnalysis": {
+        "intent": "suggest.delayAnalysis",
+        "category": "suggest",
+        "name": "delayAnalysis",
+        "title": "일정 지연 원인 분석 및 제안",
+        "description": "일이 밀렸을 때 원인을 분석하고 해결책을 제안하는 시나리오",
+        "priority": 150,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/suggest/delayAnalysis.json",
+          "code": "src/workflows/suggest/delayAnalysis.js"
+        },
+        "triggers": [
+          "일이 밀렸어",
+          "일정이 늦어지고 있어",
+          "데드라인을 못 맞출 것 같아",
+          "진행이 느려",
+          "뒤처지고 있어"
+        ],
+        "examples": [
+          "일이 너무 밀려서 어떻게 해야 할지 모르겠어",
+          "프로젝트 일정이 계속 늦어지는데 원인을 찾고 싶어",
+          "데드라인까지 시간이 부족한데 어떻게 해결하지?",
+          "왜 자꾸 일정이 지연되는지 분석해줘"
+        ]
+      },
+      "suggest.productivityTip": {
+        "intent": "suggest.productivityTip",
+        "category": "suggest",
+        "name": "productivityTip",
+        "title": "생산성 향상 팁 제안",
+        "description": "현재 상황에 맞는 생산성 향상 방법을 제안하는 시나리오",
+        "priority": 120,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/suggest/productivityTip.json",
+          "code": "src/workflows/suggest/productivityTip.js"
+        },
+        "triggers": [
+          "더 효율적으로 일하고 싶어",
+          "생산성을 높이고 싶어",
+          "시간을 더 잘 활용하고 싶어",
+          "일을 더 빨리 끝내고 싶어",
+          "집중력을 높이고 싶어"
+        ],
+        "examples": [
+          "오늘 하루를 더 생산적으로 보내는 방법을 알려줘",
+          "집중력이 떨어질 때 어떻게 해야 할까?",
+          "업무 효율성을 높이는 팁을 추천해줘",
+          "시간 관리를 더 잘하는 방법이 있을까?"
+        ]
+      },
+      "suggest.rescheduleOption": {
+        "intent": "suggest.rescheduleOption",
+        "category": "suggest",
+        "name": "rescheduleOption",
+        "title": "대안 일정 제안",
+        "description": "기존 일정을 조정하여 최적의 대안 스케줄을 제안하는 시나리오",
+        "priority": 140,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/suggest/rescheduleOption.json",
+          "code": "src/workflows/suggest/rescheduleOption.js"
+        },
+        "triggers": [
+          "일정을 바꿔줘",
+          "다른 시간으로 옮겨줘",
+          "리스케줄해줘",
+          "일정 조정이 필요해",
+          "시간을 변경하고 싶어"
+        ],
+        "examples": [
+          "내일 회의를 다른 시간으로 옮길 수 있을까?",
+          "이번 주 일정을 전체적으로 재조정해줘",
+          "더 효율적인 스케줄로 바꿔줘",
+          "시간 여유가 있는 날로 일정을 옮겨줘"
+        ]
+      },
+      "summarize.reportSummary": {
+        "intent": "summarize.reportSummary",
+        "category": "summarize",
+        "name": "reportSummary",
+        "title": "보고서 요약",
+        "description": "긴 문서나 보고서의 핵심 내용을 요약하는 시나리오",
+        "priority": 140,
+        "enabled": true,
+        "paths": {
+          "scenario": "scenario/summarize/reportSummary.json",
+          "code": "src/workflows/summarize/reportSummary.js"
+        },
+        "triggers": [
+          "요약해줘",
+          "정리해줘",
+          "핵심만 알려줘",
+          "간단히 설명해줘",
+          "요점을 정리해줘"
+        ],
+        "examples": [
+          "이 보고서의 핵심 내용을 요약해줘",
+          "회의록을 간단히 정리해줘",
+          "프로젝트 진행 상황을 요약해줘",
+          "이 문서의 주요 포인트를 알려줘"
+        ]
+      }
+    }
+  }
+}

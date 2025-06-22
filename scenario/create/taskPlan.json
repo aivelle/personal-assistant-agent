@@ -1,0 +1,63 @@
+{
+  "name": "taskPlan",
+  "intent": "create.taskPlan",
+  "title": "작업 계획 생성",
+  "description": "새로운 작업이나 프로젝트의 계획을 체계적으로 생성하는 시나리오",
+  "category": "create",
+  "priority": 160,
+  "enabled": true,
+  "triggers": [
+    "새 프로젝트를 시작해야 해",
+    "작업 계획을 세워줘",
+    "할 일 목록을 만들어줘",
+    "프로젝트 계획이 필요해",
+    "업무 계획을 짜줘"
+  ],
+  "examples": [
+    "웹사이트 리뉴얼 프로젝트 계획을 세워줘",
+    "이번 달 마케팅 캠페인 할 일 목록을 만들어줘",
+    "새로운 기능 개발을 위한 작업 계획이 필요해",
+    "팀 프로젝트 일정을 체계적으로 정리해줘"
+  ],
+  "parameters": [
+    {
+      "name": "project_name",
+      "type": "string",
+      "description": "프로젝트 또는 작업 이름",
+      "required": true
+    },
+    {
+      "name": "deadline",
+      "type": "date",
+      "description": "완료 기한",
+      "required": false
+    },
+    {
+      "name": "team_members",
+      "type": "array",
+      "description": "참여 인원",
+      "required": false
+    },
+    {
+      "name": "requirements",
+      "type": "array",
+      "description": "요구사항 목록",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "create/taskPlan"
+  ],
+  "outputs": {
+    "task_breakdown": "작업 분해 구조",
+    "timeline": "일정 계획",
+    "milestones": "주요 마일스톤",
+    "resource_needs": "필요 리소스"
+  },
+  "tags": [
+    "planning",
+    "project-management",
+    "task-creation",
+    "organization"
+  ]
+}

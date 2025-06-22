@@ -1,0 +1,56 @@
+{
+  "name": "dataSearch",
+  "intent": "retrieve.dataSearch",
+  "title": "데이터 검색",
+  "description": "저장된 정보에서 필요한 데이터를 검색하고 추출하는 시나리오",
+  "category": "retrieve",
+  "priority": 160,
+  "enabled": true,
+  "triggers": [
+    "찾아줘",
+    "검색해줘",
+    "어디에 있어",
+    "정보를 가져와줘",
+    "데이터를 찾아줘"
+  ],
+  "examples": [
+    "지난달 회의록을 찾아줘",
+    "프로젝트 A 관련 문서들을 검색해줘",
+    "클라이언트 연락처 정보를 가져와줘",
+    "예산 관련 자료를 찾아줘"
+  ],
+  "parameters": [
+    {
+      "name": "search_query",
+      "type": "string",
+      "description": "검색 키워드",
+      "required": true
+    },
+    {
+      "name": "data_source",
+      "type": "string",
+      "description": "검색 대상 (documents, contacts, calendar, etc.)",
+      "required": false
+    },
+    {
+      "name": "date_range",
+      "type": "object",
+      "description": "날짜 범위",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "retrieve/dataSearch"
+  ],
+  "outputs": {
+    "search_results": "검색 결과",
+    "relevant_items": "관련 항목들",
+    "summary": "결과 요약"
+  },
+  "tags": [
+    "search",
+    "retrieval",
+    "data",
+    "information"
+  ]
+}

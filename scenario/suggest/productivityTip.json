@@ -1,0 +1,56 @@
+{
+  "name": "productivityTip",
+  "intent": "suggest.productivityTip",
+  "title": "생산성 향상 팁 제안",
+  "description": "현재 상황에 맞는 생산성 향상 방법을 제안하는 시나리오",
+  "category": "suggest",
+  "priority": 120,
+  "enabled": true,
+  "triggers": [
+    "더 효율적으로 일하고 싶어",
+    "생산성을 높이고 싶어",
+    "시간을 더 잘 활용하고 싶어",
+    "일을 더 빨리 끝내고 싶어",
+    "집중력을 높이고 싶어"
+  ],
+  "examples": [
+    "오늘 하루를 더 생산적으로 보내는 방법을 알려줘",
+    "집중력이 떨어질 때 어떻게 해야 할까?",
+    "업무 효율성을 높이는 팁을 추천해줘",
+    "시간 관리를 더 잘하는 방법이 있을까?"
+  ],
+  "parameters": [
+    {
+      "name": "current_context",
+      "type": "string",
+      "description": "현재 작업 상황",
+      "required": false
+    },
+    {
+      "name": "productivity_goals",
+      "type": "array",
+      "description": "생산성 목표",
+      "required": false
+    },
+    {
+      "name": "time_available",
+      "type": "number",
+      "description": "사용 가능한 시간(분)",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "suggest/productivityTip"
+  ],
+  "outputs": {
+    "tips": "맞춤형 생산성 팁",
+    "techniques": "적용 가능한 기법들",
+    "schedule_suggestions": "시간 배분 제안"
+  },
+  "tags": [
+    "productivity",
+    "efficiency",
+    "time-management",
+    "focus"
+  ]
+}

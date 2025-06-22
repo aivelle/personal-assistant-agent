@@ -1,0 +1,95 @@
+{
+  "system": {
+    "name": "AIVELLE",
+    "version": "1.0.0",
+    "description": "AI-powered personal assistant with scenario-based workflow automation"
+  },
+  "architecture": {
+    "folders": {
+      "configs": {
+        "role": "시스템 설정과 연결 지도",
+        "description": "자동차 내비게이션, 설계도",
+        "contains": ["system-config.json", "gpt-actions/", "routing rules"]
+      },
+      "src": {
+        "role": "실제 행동 코드",
+        "description": "엔진, 핸들, 바퀴",
+        "contains": ["workflows/", "integrations/", "utils/"]
+      },
+      "scenario": {
+        "role": "상황 정의",
+        "description": "대본, 시나리오",
+        "contains": ["suggest/", "create/", "manage/", "remind/", "retrieve/", "summarize/", "insight/", "interact/"]
+      },
+      "rules": {
+        "role": "상황-행동 연결 판단",
+        "description": "대본 해석사, 감독",
+        "contains": ["routing-rules.json"]
+      },
+      "scripts": {
+        "role": "자동 정리, 반복 작업",
+        "description": "정비사 도구, 오토파일럿",
+        "contains": ["check-scenario-links.js", "generate-docs.js", "validate-config.js"]
+      }
+    }
+  },
+  "routing": {
+    "flow": [
+      "1. 사용자 입력",
+      "2. rules/routing-rules.json에서 매칭",
+      "3. scenario/{category}/{name}.json 로드",
+      "4. src/workflows/{category}/{name}.js 실행",
+      "5. 결과 반환"
+    ],
+    "principles": [
+      "시나리오는 절대 코드를 몰라야 한다",
+      "src는 절대 상황을 몰라야 한다", 
+      "rules가 둘을 연결해준다"
+    ]
+  },
+  "integrations": {
+    "google": {
+      "services": ["Calendar", "Gmail"],
+      "file": "src/integrations/google.js"
+    },
+    "notion": {
+      "services": ["Databases", "Pages", "Workspace"],
+      "file": "src/integrations/notion.js"
+    }
+  },
+  "scenarios": {
+    "categories": [
+      "suggest", "create", "manage", "remind", 
+      "retrieve", "summarize", "insight", "interact"
+    ],
+    "structure": {
+      "each_scenario": {
+        "name": "unique identifier",
+        "title": "human readable title",
+        "description": "what this scenario does",
+        "triggers": ["natural language patterns"],
+        "parameters": ["input parameters"],
+        "workflows": ["corresponding workflow files"],
+        "outputs": ["expected outputs"]
+      }
+    }
+  },
+  "workflows": {
+    "mirror_scenarios": true,
+    "structure": "src/workflows/{category}/{name}.js",
+    "requirements": [
+      "Must export main function",
+      "Must handle context parameter",
+      "Must return standardized response",
+      "Must integrate with external services"
+    ]
+  },
+  "validation": {
+    "scripts": {
+      "check-scenario-links": "Verify scenario ↔ workflow connections",
+      "validate-config-schema": "Validate JSON configurations",
+      "detect-conflicts": "Find duplicate intents",
+      "generate-docs": "Auto-generate documentation"
+    }
+  }
+} 
