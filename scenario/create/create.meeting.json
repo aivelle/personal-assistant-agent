@@ -41,5 +41,63 @@
       "destination": "google.calendar"
     }
   ],
-  "intent": "create.meeting"
+  "intent": "create.meeting",
+  "title": "회의 일정 생성",
+  "description": "새로운 회의를 일정에 추가하고 캘린더에 등록하는 시나리오",
+  "category": "create",
+  "priority": 150,
+  "enabled": true,
+  "triggers": [
+    "회의를 예약해줘",
+    "미팅을 잡아줘",
+    "회의 일정을 만들어줘",
+    "회의를 스케줄해줘",
+    "미팅 예약해줘"
+  ],
+  "examples": [
+    "내일 오후 2시에 팀 회의를 예약해줘",
+    "다음 주 월요일에 클라이언트 미팅을 잡아줘",
+    "프로젝트 킥오프 회의를 스케줄해줘",
+    "화요일 10시에 1:1 미팅을 예약해줘"
+  ],
+  "parameters": [
+    {
+      "name": "title",
+      "type": "string",
+      "description": "회의 제목",
+      "required": true
+    },
+    {
+      "name": "scheduled_time",
+      "type": "datetime",
+      "description": "회의 예정 시간",
+      "required": true
+    },
+    {
+      "name": "platform",
+      "type": "string",
+      "description": "회의 플랫폼 (Zoom, Teams 등)",
+      "required": false
+    },
+    {
+      "name": "attendees",
+      "type": "array",
+      "description": "참석자 목록",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "create/meeting"
+  ],
+  "outputs": {
+    "meeting_id": "생성된 회의 ID",
+    "calendar_event": "캘린더 이벤트 정보",
+    "confirmation": "예약 확인 메시지"
+  },
+  "tags": [
+    "meeting",
+    "calendar",
+    "schedule",
+    "appointment"
+  ]
 }

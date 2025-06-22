@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "generated": "2025-06-22T00:42:24.797Z",
+    "generated": "2025-06-22T00:57:12.441Z",
     "description": "Auto-generated routing rules from scenario definitions",
     "total_scenarios": 16,
     "categories": [
@@ -49,46 +49,79 @@
         "intent": "create.meeting",
         "category": "create",
         "name": "meeting",
-        "title": "meeting",
-        "description": "",
-        "priority": 100,
+        "title": "회의 일정 생성",
+        "description": "새로운 회의를 일정에 추가하고 캘린더에 등록하는 시나리오",
+        "priority": 150,
         "enabled": true,
         "paths": {
           "scenario": "scenario/create/create.meeting.json",
           "code": "src/workflows/create/meeting.js"
         },
-        "triggers": [],
-        "examples": []
+        "triggers": [
+          "회의를 예약해줘",
+          "미팅을 잡아줘",
+          "회의 일정을 만들어줘",
+          "회의를 스케줄해줘",
+          "미팅 예약해줘"
+        ],
+        "examples": [
+          "내일 오후 2시에 팀 회의를 예약해줘",
+          "다음 주 월요일에 클라이언트 미팅을 잡아줘",
+          "프로젝트 킥오프 회의를 스케줄해줘",
+          "화요일 10시에 1:1 미팅을 예약해줘"
+        ]
       },
       "create.reminder": {
         "intent": "create.reminder",
         "category": "create",
         "name": "reminder",
-        "title": "reminder",
-        "description": "",
-        "priority": 100,
+        "title": "리마인더 생성",
+        "description": "시간 기반 리마인더를 생성하고 알림을 설정하는 시나리오",
+        "priority": 130,
         "enabled": true,
         "paths": {
           "scenario": "scenario/create/create.reminder.json",
           "code": "src/workflows/create/reminder.js"
         },
-        "triggers": [],
-        "examples": []
+        "triggers": [
+          "리마인더를 설정해줘",
+          "알림을 만들어줘",
+          "리마인더 추가해줘",
+          "알림 설정해줘",
+          "미리 알려줘"
+        ],
+        "examples": [
+          "내일 오전 9시에 회의 준비 리마인더를 설정해줘",
+          "다음 주 금요일에 보고서 제출 알림을 만들어줘",
+          "30분 후에 전화하라고 리마인더 추가해줘",
+          "매주 월요일마다 주간 계획 세우기 알림 설정해줘"
+        ]
       },
       "create.task": {
         "intent": "create.task",
         "category": "create",
         "name": "task",
-        "title": "task",
-        "description": "",
-        "priority": 100,
+        "title": "작업 생성",
+        "description": "새로운 작업을 생성하고 작업 관리 시스템에 추가하는 시나리오",
+        "priority": 140,
         "enabled": true,
         "paths": {
           "scenario": "scenario/create/create.task.json",
           "code": "src/workflows/create/task.js"
         },
-        "triggers": [],
-        "examples": []
+        "triggers": [
+          "할 일을 추가해줘",
+          "작업을 만들어줘",
+          "태스크를 생성해줘",
+          "새 작업을 등록해줘",
+          "할 일을 등록해줘"
+        ],
+        "examples": [
+          "프로젝트 문서 작성 작업을 추가해줘",
+          "내일까지 리포트 완성하는 할 일을 만들어줘",
+          "클라이언트 미팅 준비 태스크를 생성해줘",
+          "코드 리뷰 작업을 등록해줘"
+        ]
       },
       "create.taskPlan": {
         "intent": "create.taskPlan",
@@ -159,7 +192,14 @@
           "물어볼게 있어",
           "상담해줘",
           "이야기하자",
-          "조언해줘"
+          "조언해줘",
+          "안녕하세요",
+          "안녕",
+          "도움이 필요해요",
+          "도와줘",
+          "질문이 있어요",
+          "궁금한게 있어요",
+          "문의드려요"
         ],
         "examples": [
           "오늘 업무에 대해 상담하고 싶어",

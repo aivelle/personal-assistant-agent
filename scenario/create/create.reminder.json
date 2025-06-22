@@ -35,5 +35,57 @@
       "destination": "notion.reminders"
     }
   ],
-  "intent": "create.reminder"
+  "intent": "create.reminder",
+  "title": "리마인더 생성",
+  "description": "시간 기반 리마인더를 생성하고 알림을 설정하는 시나리오",
+  "category": "create",
+  "priority": 130,
+  "enabled": true,
+  "triggers": [
+    "리마인더를 설정해줘",
+    "알림을 만들어줘",
+    "리마인더 추가해줘",
+    "알림 설정해줘",
+    "미리 알려줘"
+  ],
+  "examples": [
+    "내일 오전 9시에 회의 준비 리마인더를 설정해줘",
+    "다음 주 금요일에 보고서 제출 알림을 만들어줘",
+    "30분 후에 전화하라고 리마인더 추가해줘",
+    "매주 월요일마다 주간 계획 세우기 알림 설정해줘"
+  ],
+  "parameters": [
+    {
+      "name": "title",
+      "type": "string",
+      "description": "리마인더 제목",
+      "required": true
+    },
+    {
+      "name": "due_date",
+      "type": "datetime",
+      "description": "알림 시간",
+      "required": true
+    },
+    {
+      "name": "platform",
+      "type": "string",
+      "description": "알림 플랫폼",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "create/reminder"
+  ],
+  "outputs": {
+    "reminder_id": "생성된 리마인더 ID",
+    "reminder_details": "리마인더 상세 정보",
+    "confirmation": "설정 확인 메시지"
+  },
+  "tags": [
+    "reminder",
+    "notification",
+    "alert",
+    "schedule"
+  ]
 }

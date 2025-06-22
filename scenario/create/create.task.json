@@ -53,5 +53,75 @@
       "destination": "notion.tasks"
     }
   ],
-  "intent": "create.task"
+  "intent": "create.task",
+  "title": "작업 생성",
+  "description": "새로운 작업을 생성하고 작업 관리 시스템에 추가하는 시나리오",
+  "category": "create",
+  "priority": 140,
+  "enabled": true,
+  "triggers": [
+    "할 일을 추가해줘",
+    "작업을 만들어줘",
+    "태스크를 생성해줘",
+    "새 작업을 등록해줘",
+    "할 일을 등록해줘"
+  ],
+  "examples": [
+    "프로젝트 문서 작성 작업을 추가해줘",
+    "내일까지 리포트 완성하는 할 일을 만들어줘",
+    "클라이언트 미팅 준비 태스크를 생성해줘",
+    "코드 리뷰 작업을 등록해줘"
+  ],
+  "parameters": [
+    {
+      "name": "title",
+      "type": "string",
+      "description": "작업 제목",
+      "required": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "작업 상태",
+      "required": true
+    },
+    {
+      "name": "due_date",
+      "type": "date",
+      "description": "마감일",
+      "required": true
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "description": "우선순위",
+      "required": false
+    },
+    {
+      "name": "area",
+      "type": "string",
+      "description": "작업 영역",
+      "required": false
+    },
+    {
+      "name": "project_relation",
+      "type": "string",
+      "description": "관련 프로젝트",
+      "required": false
+    }
+  ],
+  "workflows": [
+    "create/task"
+  ],
+  "outputs": {
+    "task_id": "생성된 작업 ID",
+    "task_details": "작업 상세 정보",
+    "confirmation": "생성 확인 메시지"
+  },
+  "tags": [
+    "task",
+    "todo",
+    "work",
+    "assignment"
+  ]
 }
